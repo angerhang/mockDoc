@@ -1,98 +1,55 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?latexml searchpaths=".,//home/la_stravaganza/mockDoc/"?>
-<?latexml class="article"?>
+<?latexml searchpaths="/Users/yuancalvin/xmlDocumentClass"?>
+<?latexml class="doc"?>
 <?latexml RelaxNGSchema="LaTeXML"?>
-<document xmlns="http://dlmf.nist.gov/LaTeXML">
+<document xmlns="http://dlmf.nist.gov/LaTeXML" class="ltx_authors_1line">
+  <resource src="LaTeXML.css" type="text/css"/>
+  <resource src="ltx-article.css" type="text/css"/>
   <title>MockDoc</title>
   <creator role="author">
     <personname>Jinbo Zhang</personname>
   </creator>
-  <section refnum="1" xml:id="S1">
-    <title>Ode to the West Wind (partial)</title>
-    <subsection refnum="1.1" xml:id="S1.SS1">
-      <title>I</title>
-      <paragraph xml:id="S1.SS1.SSS0.P1">
-        <title/>
-        <para xml:id="S1.SS1.SSS0.P1.p1">
-          <p>O wild West Wind, thou breath of Autumn’s being,
+  <para xml:id="p1">
+    <p>Ode to the West Wind (partial)
+<ERROR class="undefined">\thesection</ERROR>.I
+
+O wild West Wind, thou breath of Autumnâs being,
 Thou, from whose unseen presence the leaves dead
-Are driven, like ghosts from an enchanter fleeing,</p>
-        </para>
-      </paragraph>
-      <paragraph xml:id="S1.SS1.SSS0.P2">
-        <title/>
-        <para xml:id="S1.SS1.SSS0.P2.p1">
-          <p>Yellow, and black, and pale, and hectic red,
+Are driven, like ghosts from an enchanter fleeing,
+
+Yellow, and black, and pale, and hectic red,
 Pestilence-stricken multitudes: O thou,
-Who chariotest to their dark wintry bed</p>
-        </para>
-      </paragraph>
-      <paragraph xml:id="S1.SS1.SSS0.P3">
-        <title/>
-        <para xml:id="S1.SS1.SSS0.P3.p1">
-          <p>The wingèd seeds, where they lie cold and low,
+Who chariotest to their dark wintry bed
+
+The wingÃ¨d seeds, where they lie cold and low,
 Each like a corpse within its grave, until
-Thine azure sister of the Spring shall blow</p>
-        </para>
-      </paragraph>
-      <paragraph xml:id="S1.SS1.SSS0.P4">
-        <title/>
-        <para xml:id="S1.SS1.SSS0.P4.p1">
-          <p>Her clarion o’er the dreaming earth, and fill
+Thine azure sister of the Spring shall blow
+
+Her clarion oâer the dreaming earth, and fill
 (Driving sweet buds like flocks to feed in air)
-With living hues and odours plain and hill:</p>
-        </para>
-      </paragraph>
-      <paragraph xml:id="S1.SS1.SSS0.P5">
-        <title/>
-        <!-- %**** mockDoc.tex Line 25 **** -->
-        <para xml:id="S1.SS1.SSS0.P5.p1">
-          <p>Wild Spirit, which art moving everywhere;
-Destroyer and Preserver; hear, O hear!</p>
-        </para>
-      </paragraph>
-    </subsection>
-    <subsection refnum="1.2" xml:id="S1.SS2">
-      <title>II</title>
-      <paragraph xml:id="S1.SS2.SSS0.P1">
-        <title/>
-        <para xml:id="S1.SS2.SSS0.P1.p1">
-          <p>Thou on whose stream, ‘mid the steep sky’s commotion,
-Loose clouds like Earth’s decaying leaves are shed,
-Shook from the tangled boughs of Heaven and Ocean,</p>
-        </para>
-      </paragraph>
-      <paragraph xml:id="S1.SS2.SSS0.P2">
-        <title/>
-        <para xml:id="S1.SS2.SSS0.P2.p1">
-          <p>Angels of rain and lightning: there are spread
+With living hues and odours plain and hill:
+
+<!-- %**** mockDoc.tex Line 25 **** -->Wild Spirit, which art moving everywhere;
+Destroyer and Preserver; hear, O hear!
+<ERROR class="undefined">\thesection</ERROR>.II
+
+Thou on whose stream, âmid the steep skyâs commotion,
+Loose clouds like Earthâs decaying leaves are shed,
+Shook from the tangled boughs of Heaven and Ocean,
+
+Angels of rain and lightning: there are spread
 On the blue surface of thine airy surge,
-Like the bright hair uplifted from the head</p>
-        </para>
-      </paragraph>
-      <paragraph xml:id="S1.SS2.SSS0.P3">
-        <title/>
-        <para xml:id="S1.SS2.SSS0.P3.p1">
-          <p>Of some fierce Maenad, even from the dim verge
-Of the horizon to the zenith’s height,
-The locks of the approaching storm. Thou dirge</p>
-        </para>
-      </paragraph>
-      <paragraph xml:id="S1.SS2.SSS0.P4">
-        <title/>
-        <para xml:id="S1.SS2.SSS0.P4.p1">
-          <p>Of the dying year, to which this closing night
+Like the bright hair uplifted from the head
+
+Of some fierce Maenad, even from the dim verge
+Of the horizon to the zenithâs height,
+The locks of the approaching storm. Thou dirge
+
+Of the dying year, to which this closing night
 Will be the dome of a vast sepulchre
-Vaulted with all thy congregated might</p>
-        </para>
-      </paragraph>
-      <paragraph xml:id="S1.SS2.SSS0.P5">
-        <title/>
-        <para xml:id="S1.SS2.SSS0.P5.p1">
-          <p>Of vapours, from whose solid atmosphere
+Vaulted with all thy congregated might
+
+Of vapours, from whose solid atmosphere
 Black rain, and fire, and hail will burst: O hear!</p>
-        </para>
-      </paragraph>
-    </subsection>
-  </section>
+  </para>
 </document>

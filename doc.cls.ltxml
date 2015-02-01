@@ -1,8 +1,26 @@
 package LaTeXML::Package::pool; 
 use LaTeXML::Package;          
-use strict;                  use warnings;
+use strict;                  
+use warnings;
 
 LoadPool('LaTeX');
+
+#**********************************************************************
+# Option handling
+foreach my $option (qw(10pt 11pt 12pt
+  letterpaper legalpaper executivepaper a4paper a5paper b5paper
+  landscape
+  final draft
+  oneside twoside
+  openright openany
+  onecolumn twocolumn
+  notitlepage titlepage)) {
+  DeclareOption($option, undef); }
+
+DeclareOption('openbib', sub {
+    RequireResource(undef, type => 'text/css', content => '.ltx_bibblock{display:block;}'); });
+DeclareOption('leqno', sub { AssignMapping('DOCUMENT_CLASSES', ltx_leqno => 1); });
+DeclareOption('fleqn', sub { AssignMapping('DOCUMENT_CLASSES', ltx_fleqn => 1); });
 
 #**********************************************************************
 # Document structure.
@@ -23,27 +41,15 @@ EOTeX
 
 #**********************************************************************
 # The core sectioning commands are defined in LaTeX.pm
-NewCounter('subsection',    'section',       idprefix => 'SS',  nested => ['subsubsection']);
+# but the counter setup, etc, depends on article
+NewCounter('tsection',       'document',      idprefix => 'S');
+NewCounter('tsubsection',    'document',       idprefix => 'SS',  idwithin=>'tsection');
+NewCounter('tparagraph',     'document', idprefix => 'P',    idwithin=>'tsubsection');
 
-DefMacro('\thesection',       '\arabic{section}');
-DefMacro('\thesubsection',    '\thesection.\arabic{subsection}');
-DefMacro('\thesubsubsection', '\thesubsection.\arabic{subsubsection}');
 
-Tag('ltx:appendix', autoClose => 1);
-# Actually we should be using section counter
-AssignValue(counter_for_appendix => 'section');
-DefMacro('\appendix@section', '\@startsection{appendix}{}{}{}{}{}');
-DefMacro('\appendix',         '\@appendix');
-DefPrimitive('\@appendix', sub {
-    NewCounter('section', 'document', idprefix => 'A', nested => ['subsection']);
-    DefMacro('\thesection', '\Alph{section}', scope => 'global');
-    DefMacroI('\theappendix', undef, '\thesection', scope => 'global');
-    Let('\section',   '\appendix@section', 'global');
-    Let('\@appendix', '\relax',            'global');
-    if (LookupDefinition(T_CS('\appendixname'))) {
-      Let('\sectionname', '\appendixname', 'global'); }
-    return; });
-
-#**********************************************************************
+DefMacro('\tsection',       '\roman{section}');
+DefMacro('\tsubsection',    '\thesection.\roman{subsection}');
+DefMacro('\tsubsubsection', '\thesubsection.\roman{subsubsection}');
+DefMacro('\tparagraph',     '');
 
 1; 
