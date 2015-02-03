@@ -1,22 +1,33 @@
+% File: doc.cls
+% Author: Jinbo Zhang
+% Date: 3 Feb, 2015
+
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesClass{doc}[2015/02/03 v0.1 Doc LaTeX class]
-
+\ProvidesClass{doc}
 \LoadClass{article}
+\RequirePackage{ifthen}
 
-\DeclareOption*{%
-	\PackageWarning{fred}{Unknown option '\CurrentOption'}%
-	}
-% disable option for doc class for now.
-% Add if options need to be executed.
-% \ProcessOptions\relax
+% define \paragraph
+\renewcommand{\paragraph}[1]{
+	\newline\newline
+	\textbf{#1}
+}
 
+% define \section
+\newcounter{SectionCount}
+\renewcommand{\section}[1]{
+	\ifthenelse{\value{SectionCount}=0}{}{\newline\newline\newline}
+	\Large
+	\stepcounter{SectionCount}
+	\noindent\textbf{\arabic{SectionCount}\hspace{4mm} #1}
+	\newline\newline
+}
 
-\newcommand{\tsec}{\section}
-\newcommand{\subsec}{\subsection}
-\newcommand{\tp}{\paragraph}
-
-% Required for *.cls 
-\renewcommand{\normalsize}{\fontsize{10pt}{12pt}\selectfont}
-\setlength{\textwidth}{12cm}
-\setlength{\textheight}{21cm}
-\setcounter{secnumdepth}{0}
+% define \subsection
+\newcounter{SubCount}[SectionCount]
+\renewcommand{\subsection}[1]{
+	\ifthenelse{\value{SubCount}=0}{}{\newline\newline}
+	\large
+	\stepcounter{SubCount}
+	\noindent\textbf{\arabic{SectionCount}.\arabic{SubCount}\hspace{3mm} #1}
+}
