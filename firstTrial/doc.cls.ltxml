@@ -1,0 +1,55 @@
+package LaTeXML::Package::pool; 
+use LaTeXML::Package;          
+use strict;                  
+use warnings;
+
+LoadPool('LaTeX');
+
+#**********************************************************************
+# Option handling
+foreach my $option (qw(10pt 11pt 12pt
+  letterpaper legalpaper executivepaper a4paper a5paper b5paper
+  landscape
+  final draft
+  oneside twoside
+  openright openany
+  onecolumn twocolumn
+  notitlepage titlepage)) {
+  DeclareOption($option, undef); }
+
+DeclareOption('openbib', sub {
+    RequireResource(undef, type => 'text/css', content => '.ltx_bibblock{display:block;}'); });
+DeclareOption('leqno', sub { AssignMapping('DOCUMENT_CLASSES', ltx_leqno => 1); });
+DeclareOption('fleqn', sub { AssignMapping('DOCUMENT_CLASSES', ltx_fleqn => 1); });
+
+#**********************************************************************
+# Document structure.
+RelaxNGSchema("LaTeXML");
+RequireResource('ltx-article.css');
+
+# This makes the authors appear on 1 line;
+# for derived classes with multiple lines, map this to undef and add ltx_authors_multiline
+
+AddToMacro(T_CS('\maketitle'), T_CS('\ltx@authors@oneline'));
+
+DefMacro('\@ptsize', '0');    # should depend on options...
+RawTeX(<<'EOTeX');
+\newif\if@restonecol
+\newif\if@titlepage
+\@titlepagefalse
+EOTeX
+
+#**********************************************************************
+# The core sectioning commands are defined in LaTeX.pm
+# but the counter setup, etc, depends on article
+NewCounter('tsection',       'document',      idprefix => 'S');
+NewCounter('tsubsection',    'document',       idprefix => 'SS',  idwithin=>'tsection');
+NewCounter('tparagraph',     'document', idprefix => 'P',    idwithin=>'tsubsection');
+
+
+DefMacro('\tsection',       '\roman{section}');
+DefMacro('\tsubsection',    '\thesection.\roman{subsection}');
+DefMacro('\tsubsubsection', '\thesubsection.\roman{subsubsection}');
+DefMacro('\tparagraph',     '');
+
+1; 
