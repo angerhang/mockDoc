@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grammar xmlns="http://relaxng.org/ns/structure/1.0">
+  <start>
+    <ref name="md:document"/>
+  </start>
+  <define name="md:document">
+    <element name="md:document" ns="https:kwarc.info/projects/mockDoc">
+      <ref name="section"/>
+      <ref name="subsection"/>
+    </element>
+  </define>
+  <define name="section">
+    <zeroOrMore>
+      <element name="section">
+        <ref name="title"/>
+        <choice>
+          <ref name="p"/>
+          <ref name="subsection"/>
+        </choice>
+      </element>
+    </zeroOrMore>
+  </define>
+  <define name="subsection">
+    <zeroOrMore>
+      <element name="subsection">
+        <ref name="title"/>
+        <zeroOrMore>
+          <ref name="paragraph"/>
+        </zeroOrMore>
+      </element>
+    </zeroOrMore>
+  </define>
+  <define name="paragraph">
+    <element name="paragraph">
+      <ref name="p"/>
+    </element>
+  </define>
+  <define name="title">
+    <element name="title">
+      <text/>
+    </element>
+  </define>
+  <define name="p">
+    <element name="p">
+      <zeroOrMore>
+        <choice>
+          <text/>
+          <element name="break">
+            <empty/>
+          </element>
+        </choice>
+      </zeroOrMore>
+    </element>
+  </define>
+</grammar>
