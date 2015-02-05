@@ -1,0 +1,19 @@
+start = element document {
+		element section {
+			tag,
+			title,
+			(p | 
+			 element subsection {
+			 	tag,
+			 	title,
+				element paragraph { tag,
+								p}*
+							}*)
+					   }*
+					   }					
+tag = element tag { text }
+title = element title { text }
+p = element p { (text |
+			element break { empty })*
+			  }
+									
