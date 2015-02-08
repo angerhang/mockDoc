@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<md:document xmlns:md=  "https:kwarc.info/projects/mockDoc">
+<document xmlns="https:kwarc.info/projects/mockDoc">
 	<section>
 		<title>A brief introduction about Shelley</title>
 			<p>Percy Bysshe Shelley (4 August 1792 – 8
@@ -122,5 +122,5 @@
      			 </paragraph>
      		</subsection>
      	</section>
-</md:document>
+</document>
 
