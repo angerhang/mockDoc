@@ -1,0 +1,26 @@
+package LaTeXML::Package::pool;
+use LaTeXML::Package;
+use strict;
+use warnings;
+
+#Document Structure 
+RelaxNGSchema("mockDoc.rng");
+RegisterNamespace(" ","https:kwarc.info/projects/mockDoc");
+
+#---------------------------------------------------------------------
+DefConstructor('\section{}', "<mySection><title>#1</title></mySection>");
+DefConstructor('\subsection{}', "<mySubsection><title>#1</title></mySubsection>");
+DefConstructor('\paragraph{}', "<myPara><title>#1</title>#2</myPara>");
+
+#Counters -------------------------------------------------------------
+NewCounter('section','document',idprefix=>'S');
+NewCounter('subsection','section',idprefix=>'B');
+
+#Autoclose
+Tag('prefix:\paragraph{}', autoClose=>1);
+Tag('section', autoClose=>1);
+Tag('prefix:\subsection{}', autoClose=>1);
+
+
+#make sure Perl work 
+1;
