@@ -9,7 +9,7 @@ RelaxNGSchema("mockDoc.rng",'mock'=>"https://kwarc.info/projects/mockDoc");
 
 
 #---------------------------------------------------------------------
-DefEnvironment('{document}', "<mock:document>#body</mock:document>");
+DefEnvironment('{document}', "<mock:document>#body</mock:document>", beforeDigest => sub { AssignValue(inPreamble => 0); });
 DefConstructor('\section{}', "<mock:section><mock:title>#1</mock:title>");
 DefConstructor('\subsection{}', "<mock:subsection><mock:title>#1</mock:title>");
 DefConstructor('\paragraph{}', "<mock:paragraph><mock:title>#1</mock:title><mock:p>");
