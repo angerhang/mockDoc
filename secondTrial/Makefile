@@ -14,7 +14,7 @@ mockDoc.rng: mockDoc.rnc
 #the codes below follow the usage of variables mentioned above
 #’$@‘: object filename. ‘$<‘:source file name
 $(XML): %.xml: %.tex mockDoc.rng doc.cls.ltxml
-	latexmlc $< --format=XML --destination=$@ --log=$@.log
+	latexmlc $<  --format=XML --destination=$@ --log=$@.log
 
 $(PDF): %.pdf: %.tex doc.cls
 	pdflatex $<

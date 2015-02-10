@@ -5,19 +5,21 @@ use warnings;
 
 #Document Structure 
 RelaxNGSchema("mockDoc.rng");
-#RegisterNamespace('mock'=>"https://kwarc.info/projects/mockDoc");
+RegisterNamespace('mock'=>"https://kwarc.info/projects/mockDoc");
 
 #---------------------------------------------------------------------
-DefEnvironment('{document}', '<document>#body</document>');
-DefConstructor('\section{}', "<section><title>#1</title>");
-DefConstructor('\subsection{}', "<subsection><title>#1</title>");
-DefConstructor('\paragraph{}', "<paragraph><title>#1</title><p>");
+DefEnvironment('{document}', '<mock:document>#body</mock:document>');
+DefConstructor('\section{}', "<mock:section><mock:title>#1");
+DefConstructor('\subsection{}', "<mock:subsection><mock:title>#1");
+DefConstructor('\paragraph{}', "<mock:paragraph><mock:title>#1</mock:title><mock:p>");
+
 
 #autoClose
-Tag('paragraph', autoClose=>1);
-Tag('section', autoClose=>1);
-Tag('subsection', autoClose=>1);
-Tag('p', autoClose=>1);
+Tag('mock:title', autoClose=>1);
+Tag('mock:paragraph', autoClose=>1);
+Tag('mock:section', autoClose=>1);
+Tag('mock:subsection', autoClose=>1);
+Tag('mock:p', autoClose=>1);
 
 
 #make sure Perl work 
