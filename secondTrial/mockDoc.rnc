@@ -1,4 +1,4 @@
-default namespace md = "https:kwarc.info/projects/mockDoc"
+default namespace md = "https://kwarc.info/projects/mockDoc"
 
 start = document
 document = element document {section*}

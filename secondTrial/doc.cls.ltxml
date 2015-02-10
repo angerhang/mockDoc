@@ -1,26 +1,25 @@
-package LaTeXML::Package::pool;
-use LaTeXML::Package;
+package LaTeXML::Package::Pool;
 use strict;
+use LaTeXML::Package;
 use warnings;
 
 #Document Structure 
 RelaxNGSchema("mockDoc.rng");
-RegisterNamespace(" ","https:kwarc.info/projects/mockDoc");
+#RegisterNamespace('mock'=>"https://kwarc.info/projects/mockDoc");
 
 #---------------------------------------------------------------------
-DefConstructor('\section{}', "<mySection><title>#1</title></mySection>");
-DefConstructor('\subsection{}', "<mySubsection><title>#1</title></mySubsection>");
-DefConstructor('\paragraph{}', "<myPara><title>#1</title>#2</myPara>");
+DefEnvironment('{document}', '<document>#body</document>');
+DefConstructor('\section{}', "<section><title>#1</title>");
+DefConstructor('\subsection{}', "<subsection><title>#1</title>");
+DefConstructor('\paragraph{}', "<paragraph><title>#1</title><p>");
 
-#Counters -------------------------------------------------------------
-NewCounter('section','document',idprefix=>'S');
-NewCounter('subsection','section',idprefix=>'B');
-
-#Autoclose
-Tag('prefix:\paragraph{}', autoClose=>1);
+#autoClose
+Tag('paragraph', autoClose=>1);
 Tag('section', autoClose=>1);
-Tag('prefix:\subsection{}', autoClose=>1);
+Tag('subsection', autoClose=>1);
+Tag('p', autoClose=>1);
 
 
 #make sure Perl work 
 1;
+
