@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?latexml searchpaths="/home/la_stravaganza/repos/mockDoc/ChineseSupport"?>
+<?latexml class="article"?>
+<?latexml package="inputenc" options="utf8"?>
+<?latexml RelaxNGSchema="LaTeXML"?>
+<document xmlns="http://dlmf.nist.gov/LaTeXML">
+  <resource src="LaTeXML.css" type="text/css"/>
+  <resource src="ltx-article.css" type="text/css"/>
+  <para xml:id="p1">
+    <p>这是一些简体汉字。<!-- %These are some simplified Chinese words, used in mainland China & Singapore. -->這是一些繁體漢字。<!-- %These are some traditional Chinese words, used in Taiwan, Hongkong & Macau. --></p>
+  </para>
+</document>
