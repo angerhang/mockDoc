@@ -4,7 +4,7 @@ start = document
 document = element document {section*}
 section = element section {title,(p |subsection)*}
 subsection = element subsection {title,paragraph*}
-paragraph = element paragraph { p }
+paragraph = element paragraph { title, p }
 title = element title { text }
 p = element p { (text|element break { empty })*}
 

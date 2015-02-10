@@ -31,6 +31,7 @@
   </define>
   <define name="paragraph">
     <element name="paragraph">
+      <ref name="title"/>
       <ref name="p"/>
     </element>
   </define>
