@@ -2,11 +2,12 @@
 <?latexml searchpaths="/home/la_stravaganza/repos/mockDoc/ChineseSupport"?>
 <?latexml class="article"?>
 <?latexml package="inputenc" options="utf8"?>
+<?latexml package="ctex"?>
 <?latexml RelaxNGSchema="LaTeXML"?>
 <document xmlns="http://dlmf.nist.gov/LaTeXML">
   <resource src="LaTeXML.css" type="text/css"/>
   <resource src="ltx-article.css" type="text/css"/>
   <para xml:id="p1">
-    <p>这是一些简体汉字。<!-- %These are some simplified Chinese words, used in mainland China & Singapore. -->這是一些繁體漢字。<!-- %These are some traditional Chinese words, used in Taiwan, Hongkong & Macau. --></p>
+    <p>你好，<break/>这是一些简体汉字，在中国大陆及新加坡使用。<break/>這是一些繁體漢字，在臺灣、香港及澳門使用。<break/><text font="bold">试试粗体。<break/></text><text font="italic">试试斜体。<break/><break/></text>Hello,<break/>These are some simplified Chinese words, used in mainland China &amp; Singapore.<break/>These are some traditional Chinese words, used in Taiwan, Hongkong &amp; Macau.<break/><text font="bold">Try Bold face.<break/></text><text font="italic">Try Italic face.<break/></text></p>
   </para>
 </document>
