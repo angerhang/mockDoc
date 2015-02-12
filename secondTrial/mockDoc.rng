@@ -5,6 +5,7 @@
   </start>
   <define name="document">
     <element name="document">
+      <ref name="p"/>
       <zeroOrMore>
         <ref name="section"/>
       </zeroOrMore>
@@ -31,6 +32,7 @@
   </define>
   <define name="paragraph">
     <element name="paragraph">
+      <ref name="title"/>
       <ref name="p"/>
     </element>
   </define>
