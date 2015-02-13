@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?latexml searchpaths="/home/la_stravaganza/repos/mockDoc/secondTrial"?>
+<?latexml class="doc"?>
+<?latexml RelaxNGSchema="mockDoc.rng"?>
+<mock:document xmlns:mock="https://kwarc.info/projects/mockDoc">
+  <mock:section>
+    <mock:title>A brief introduction about Shelley</mock:title>
+    <mock:p>Percy Bysshe Shelley (4 August 1792 – 8 July 1822) was one of the major English Romantic poets, and is regarded by some critics as amongst the finest lyric poets in the English language.
+</mock:p>
+  </mock:section>
+  <mock:section>
+    <mock:title>Ode to the West Wind (partial)</mock:title>
+    <mock:subsection>
+      <mock:title>I</mock:title>
+      <mock:paragraph>
+        <mock:title>1.</mock:title>
+        <mock:p>
+O wild West Wind, thou breath of Autumn’s being, <mock:break/>Thou, from whose unseen presence the leaves dead <mock:break/>Are driven, like ghosts from an enchante fleeing,
+</mock:p>
+      </mock:paragraph>
+      <mock:paragraph>
+        <mock:title>2.</mock:title>
+        <mock:p>
+Yellow, and black, and pale, and hectic red,<mock:break/>Pestilence-stricken multitudes: O thou, <mock:break/>Who chariotest to their dark wintry bed
+</mock:p>
+      </mock:paragraph>
+      <mock:paragraph>
+        <mock:title>3.</mock:title>
+        <mock:p>
+The winged seeds, where they lie cold and low,<mock:break/>Each like a corpse within its grave, until <mock:break/>Thine azure sister of the Spring shall blow
+</mock:p>
+      </mock:paragraph>
+      <mock:paragraph>
+        <mock:title>4.</mock:title>
+        <mock:p>
+Her clarion o’er the dreaming earth, and fill <mock:break/>(Driving sweet buds like flocks to feed in air) <mock:break/>With living hues and odours plain and hill:
+</mock:p>
+      </mock:paragraph>
+      <mock:paragraph>
+        <mock:title>5.</mock:title>
+        <mock:p>
+Wild Spirit, which art moving everywhere; <mock:break/>Destroyer and Preserver; hear, O hear!
+</mock:p>
+      </mock:paragraph>
+    </mock:subsection>
+    <mock:subsection>
+      <mock:title>II</mock:title>
+      <mock:paragraph>
+        <mock:title>1.</mock:title>
+        <mock:p>
+<!-- %**** mockDoc.tex Line 25 **** -->Thou on whose stream, ’mid the steep sky’s commotion, <mock:break/>Loose clouds like Earth’s decaying leaves are shed, <mock:break/>Shook from the tangled boughs of Heaven and Ocean,
+</mock:p>
+      </mock:paragraph>
+      <mock:paragraph>
+        <mock:title>2.</mock:title>
+        <mock:p>
+Angels of rain and lightning: there are spread <mock:break/>On the blue surface of thine airy surge, <mock:break/>Like the bright hair uplifted from the head
+</mock:p>
+      </mock:paragraph>
+      <mock:paragraph>
+        <mock:title>3.</mock:title>
+        <mock:p>
+Of some fierce Maenad, even from the dim verge <mock:break/>Of the horizon to the zenith’s height, <mock:break/>The locks of the approaching storm. Thou dirge
+</mock:p>
+      </mock:paragraph>
+      <mock:paragraph>
+        <mock:title>4.</mock:title>
+        <mock:p>
+Of the dying year, to which this closing night <mock:break/>Will be the dome of a vast sepulchre <mock:break/>Vaulted with all thy congregated might
+</mock:p>
+      </mock:paragraph>
+      <mock:paragraph>
+        <mock:title>5.</mock:title>
+        <mock:p>
+Of vapours, from whose solid atmosphere <mock:break/>Black rain, and fire, and hail will burst: O hear!
+</mock:p>
+      </mock:paragraph>
+    </mock:subsection>
+  </mock:section>
+</mock:document>

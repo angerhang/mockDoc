@@ -1,0 +1,48 @@
+\documentclass{book}
+
+\title{\textbf{How To Write A Minimal LaTeXML Binding}}
+\author{Author: Hang Yuan, Jinbo Zhang \\ \\ \\ Supervisor: Michael Kohlhase}
+
+\begin{document}
+\maketitle
+
+\tableofcontents
+
+\large\chapter{Introduction}
+\paragraph \LaTeX  has been widely used as the word processing tool among scholars, especially 
+when one needs to use large quantities of mathematical representations. \LaTeX is also 
+good for those who are meticulous about typographical quality of the documents.  However,
+\LaTeX \ lacks of conversion tool to XML which Digital Library of Mathematical Functions uses
+for delivery. DLMF developed \LaTeX ML , trying to make a new typesetting system that allows
+users to be able to focus more on the content, but not the style, by providing extensive ways of 
+customizations. In order to achieve this goal, building up the document class binding seems crucial, 
+and yet \LaTeX ML seems fairly unfathomable for beginners. We want to make it easier for people who
+want to pick up using \LaTeX ML in the future, by going through how to construct a minimal \LaTeX ML 
+binding step by step.  \\
+
+\large\paragraph  Again, this document does not cover advanced topics related \LaTeX  ML, and thus if 
+you are interested in understanding how this and how that, it is very likely that the \LaTeX ML manual will
+serve your needs better. 
+ 
+\chapter{Understanding \LaTeX ML} 
+\section{Using LaTeXML}
+The first thing we want to talk about here is, what aspects of \LaTeX ML we are going to cover, and the 
+workflow of creating your first \LaTeX document class binding. In this particular tutorial, we will use command:\\ \\
+\textbf{latexml} for converting \TeX document into *.XML \\ \\
+The general command for conversion is \\ \\
+\textbf{latexml} {options} --destination=doc.xml doc \\ \\
+Or simply you only supply with the \TeX file and the result will be standard output which is totally fine as well,
+based on your needs. \\
+One quick note here about \LaTeX ML installation, when you think you have finish installing \LaTeX ML, run
+a simple conversion command within mockDoc.tex's directory. You should be able to see an XML interpretation of
+mockDoc.tex either in a form a standard output or a newly-generated XML file. If you have something that differs from
+the expected and have check your \LaTeX ML package multiple times, maybe you have overlooked some prerequisites such as 
+libxml2 and libxslt. 
+\section{LaTeXML Binding}
+\subsection{Minimal LaTeXML Structure}
+\subsection{RelaxNG Schema}
+\chapter{References}
+
+
+
+\end{document}
