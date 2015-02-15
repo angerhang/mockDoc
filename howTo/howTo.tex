@@ -6,8 +6,6 @@
 \begin{document}
 \maketitle
 
-\tableofcontents
-
 \large\chapter{Introduction}
 \paragraph \LaTeX  has been widely used as the word processing tool among scholars, especially 
 when one needs to use large quantities of mathematical representations. \LaTeX is also 
@@ -16,39 +14,39 @@ good for those who are meticulous about typographical quality of the documents. 
 for delivery. DLMF developed \LaTeX ML , trying to make a new typesetting system that allows
 users to be able to focus more on the content, but not the style, by providing extensive ways of 
 customizations. In order to achieve this goal, building up the document class binding seems crucial, 
-and yet \LaTeX ML seems fairly unfathomable for beginners. We want to make it easier for people who
+and yet \LaTeX ML seems fairly unfathomable for beginners. We want to make it easier for those who
 want to pick up using \LaTeX ML in the future, by going through how to construct a minimal \LaTeX ML 
 binding step by step.  \\
 
-\large\paragraph  Again, this document does not cover advanced topics related \LaTeX  ML, and thus if 
-you are interested in understanding how this and how that works, very likely the \LaTeX ML manual will
+\large\paragraph  This document does not cover advanced topics related \LaTeX  ML, and thus if 
+you are interested in understanding how this and how that work, very likely the \LaTeX ML manual will
 serve your needs better. 
  
 \chapter{Understanding \LaTeX ML} 
 \section{Using LaTeXML}
-The first thing we want to talk about here is, what aspects of \LaTeX ML we are going to cover, and the 
-workflow of creating your first \LaTeX document class binding. In this particular tutorial, we will use command:\\ \\
-\textbf{latexml} for converting \TeX document into *.XML \\ \\
+The first thing we want to talk about is, what aspects of \LaTeX ML we are going to cover, and then we will move onto the 
+workflow of creating your first \LaTeX\ document class binding. In this  tutorial, we  use command:\\ \\
+\textbf{latexml} for converting \TeX \ document into *.XML \\ \\
 The general command for conversion is \\ \\
 \textbf{latexml} {options} --destination=doc.xml doc \\ \\
-Or simply you only supply with the \TeX file and the result will be standard output which is totally fine as well,
+Or simply you only supply with the \TeX\ file and the result will be standard output which is totally fine as well,
 based on your needs. \\
-One quick note here about \LaTeX ML installation, when you think you have finish installing \LaTeX ML, run
+One quick note here about \LaTeX ML installation, when you think you have finished installing \LaTeX ML, run
 a simple conversion command within mockDoc.tex's directory. You should be able to see an XML interpretation of
 mockDoc.tex either in a form a standard output or a newly-generated XML file. If you have something that differs from
-the expected and have check your \LaTeX ML package multiple times, maybe you have overlooked some prerequisites such as 
-libxml2 and libxslt. 
+the expected and you have already checked your \LaTeX ML package multiple times, maybe you have overlooked some prerequisites such as 
+libxml2 and libxslt. \\ \\
 \textbf{Note:}
-Now in order to make better use of our document class binding in the future, we need to know how \LaTeX ML o
+Now in order to make better use of our document class binding in the future, we need to know how \LaTeX ML 
 operates in different stages. The stages are like the following: Digestion , construction, rewriting, math parsing and serialization.
 However we are not going to discuss this in detail here. For the interested users, the \LaTeX ML manual is a good source.
 \section{LaTeXML Binding}
-The conversion from \TeX to XML is processed by \LaTeX ML. Basically \LaTeX ML maps the \TeX makeup to
+The conversion from \TeX\  to XML is processed by \LaTeX ML. Basically \LaTeX ML maps the \TeX \ makeup to
 the XML markup, more specifically macros, primitives and constructors. That's why you are able to customize the conversion 
-between \TeX  and XML, in three ways, modifying the bindings used by \textbf{latexml}, adding your own bindings that has not been
-implemented, and even creating your own \TeX style and \LaTeX binding which is exactly the goal of this tutorial.
+between \TeX\  and XML, in three ways, modifying the bindings used by \textbf{latexml}, adding your own bindings that has not been
+implemented, and even creating your own \TeX \ style and \LaTeX\  binding which is exactly the goal of this tutorial.
 \subsection{Minimal LaTeXML Structure}
-Since \LaTeX binding is essentially a Perl module, we need to initialize a binding file by add the following in the beginning:\\ \\
+Since \LaTeX binding is essentially a Perl module, we need to initialize a binding file by add the followings in the beginning of the document class:\\ \\
 \textbf{package} LaTeXML::Package::Pool; //load text package \\
 \textbf{use} strict; // catch errors and stop when encounter one\\
 \textbf{use} LaTeXML::Package;\\ \\
@@ -56,7 +54,7 @@ Since \LaTeX binding is essentially a Perl module, we need to initialize a bindi
 \textbf{use} warnings; // give warnings\\
 1; //make sure Perl work properly \\ \\
 We always need to load Tex.pool binding and possibly LaTex.pool as well in the beginning. \LaTeX ML packages are just like the 
-style and class files in \TeX  and they have an extension of \emph{.ltxml}. We load our \LaTeX binding juts like how we load our 
+style and class files in \TeX\  and they have an extension of \emph{.ltxml}. We load our \LaTeX binding juts like how we load our 
 class file in \TeX . In our case we would like to load \emph{doc.cls.ltxml}, and therefore we use \emph{\textbackslash documentclasss\{doc\}},
 similarly, if you would like to load a doc type doc.sty.ltxml, you only need to include \emph{\textbackslash use package\{doc\}} in your .tex 
 file.
@@ -70,33 +68,33 @@ are options that need to be passed. In our doc.cls.ltxml, it is important to inc
  \emph {beforeDigest =\textless sub \{ AssignValue(inPreamble =\textless 0);\}} \\ \\
  for it makes sure that there spaces between words in the generated XML file. For other similar options, you might not necessarily be able to find them in 
  the manual, albeit, you can go one step further by looking at the other built in bindings such as \emph {article.cls.ltxml} and the \emph {pool} package. \\ \\
- One other error you might encounter from scratch is the constructor for new line. The macro for new line in \TeX is  \emph{\textbackslash\textbackslash}. \\
+ One other error you might encounter when creating a biding from scratch is the constructor for new line. The macro for new line in \TeX is  \emph{\textbackslash\textbackslash}. \\
  It does not necessarily mean you are able to customize  \emph{\textbackslash\textbackslash}, due to some predefinition in the \emph {pool} package, which explains 
- why we change our the conventional  \emph{\textbackslash\textbackslash} in \emph{mockDoc} into \emph{ \textbackslash newline}.
+ why we change our the conventional  \emph{\textbackslash\textbackslash} in \emph{mockDoc} into \emph{ \textbackslash newline}. The same method can be considered
+ as one possible solution for some \emph{malformed} errors.
 
 \section{Document Model}
 After customizing how \TeX  is translated into XML. There are three more schema to include: RelaxNGSchema, RegisterNamespace, and Tag.
 \subsection{RelaxNGSchema}
 The constructors tell \LaTeX ML to add a replacement into XML when it detects a prototype in the \emph{.tex} file. The question is it doesn't tell
-where should the tag be closed, and therefore we introduce \\ \\
+where the tag should be closed, and therefore we introduce \\ \\
  \emph{Tag(\$Tag,\$properties)} \\ \\
  meaning whenever there is new paragraph, the last paragraph tag will be closed, before the new paragraph tag can be added. RelaxNGSchema
- tells how the whole document class in constructed, such that when if we want to create our own document structure, RelaxNGschema is quite important. \\
+ tells how the whole document class in constructed, such that when we want to create our own document structure, RelaxNGschema is quite important. \\ \\
  \LaTeX ML is unable to process the compact form which has an extension of .rnc but .rng. It makes your life easier to write in compact form nevetnhelress.
- The trick it convert your .rnc in to .rng using trang. In a schema file, pretty much you are defining in what elements can be included in different bodies. For example \\ \\
+ The trick is to convert your .rnc in to .rng using trang. \\ \\ 
+ In a schema file, pretty much you are defining in what elements can be included in different bodies. For example \\ \\
 \emph{paragraph = element paragraph \{ title, p \} \\
 section = element section \{title,(p |subsection)*\} \\
 title = element title \{ text \} \\ 
 p = element p \{ (text|element break \{ empty \})*\} }\\ \\ 
-The first line tells \LaTeX ML, in a paragraph it has two elements that are titles and a p. The second line tells in a section, there is a title followed by two possible \\
-structure either title or subsection. \\ \\
+The first line tells \LaTeX ML, in a paragraph it has two elements that are title and p. The second line tells in a section, there is a title followed by two possible \\
+structures either title or subsection. \\ \\
 Finally we come to last part of our \LaTeX ML, namespace. Namespace differentiates our customized macros with others by adding a prefix to our \LaTeX ML constructor patterns. \\ \\
 \emph{RegisterNamespace(\$prefix, \$url) \\} 
 
-Congratulations for being able to follow the tutorial to the end. You should have everything you need for a minimal document \LaTeX ML binding. After the processing the makefile, you should be able to see the generated XML in your current directory!
+Congratulations for being able to follow this tutorial to the end. You should have everything you need to create a minimal document \LaTeX ML binding. After the processing the makefile, you should be able to see the generated XML in your current directory! \\
 
-\chapter{References}
-
-
+\textbf{Reference} Bruce R. Miller, November 21, 2014 \emph{\LaTeX ML The Manual}
 
 \end{document}
