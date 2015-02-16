@@ -1,4 +1,5 @@
 \documentclass{book}
+\usepackage{listings}
 
 \title{\textbf{How To Write A Minimal LaTeXML Binding}}
 \author{Author: Hang Yuan, Jinbo Zhang \\ \\ \\ Supervisor: Michael Kohlhase}
@@ -46,13 +47,18 @@ the XML markup, more specifically macros, primitives and constructors. That's wh
 between \TeX\  and XML, in three ways, modifying the bindings used by \textbf{latexml}, adding your own bindings that has not been
 implemented, and even creating your own \TeX \ style and \LaTeX\  binding which is exactly the goal of this tutorial.
 \subsection{Minimal LaTeXML Structure}
-Since \LaTeX binding is essentially a Perl module, we need to initialize a binding file by add the followings in the beginning of the document class:\\ \\
-\textbf{package} LaTeXML::Package::Pool; //load text package \\
-\textbf{use} strict; // catch errors and stop when encounter one\\
-\textbf{use} LaTeXML::Package;\\ \\
-//your customization here \\ \\
-\textbf{use} warnings; // give warnings\\
-1; //make sure Perl work properly \\ \\
+Since \LaTeX binding is essentially a Perl module, we need to initialize a binding file by add the followings in the beginning of the document class:
+\begin{lstlisting}
+package LaTeXML::Package::Pool; //load text package 
+use strict; // catch errors and stop when encounter one
+use LaTeXML::Package;
+
+//your customization here 
+
+use warnings; // give warnings
+1; //make sure Perl work properly 
+\end{lstlisting}
+
 We always need to load Tex.pool binding and possibly LaTex.pool as well in the beginning. \LaTeX ML packages are just like the 
 style and class files in \TeX\  and they have an extension of \emph{.ltxml}. We load our \LaTeX binding juts like how we load our 
 class file in \TeX . In our case we would like to load \emph{doc.cls.ltxml}, and therefore we use \emph{\textbackslash documentclasss\{doc\}},
@@ -83,18 +89,18 @@ where the tag should be closed, and therefore we introduce \\ \\
  tells how the whole document class in constructed, such that when we want to create our own document structure, RelaxNGschema is quite important. \\ \\
  \LaTeX ML is unable to process the compact form which has an extension of .rnc but .rng. It makes your life easier to write in compact form nevetnhelress.
  The trick is to convert your .rnc in to .rng using trang. \\ \\ 
- In a schema file, pretty much you are defining in what elements can be included in different bodies. For example \\ \\
-\emph{paragraph = element paragraph \{ title, p \} \\
-section = element section \{title,(p |subsection)*\} \\
-title = element title \{ text \} \\ 
-p = element p \{ (text|element break \{ empty \})*\} }\\ \\ 
-The first line tells \LaTeX ML, in a paragraph it has two elements that are title and p. The second line tells in a section, there is a title followed by two possible \\
+ In a schema file, pretty much you are defining in what elements can be included in different bodies. 
+ As you can see in \emph{mockDoc.rnc} file. We need to register our namespace first, which we need to do later in \LaTeX ML file as well.
+ The the definition of paragraph tells \LaTeX ML, in a paragraph it has two elements that are title and p. Likewise, section contains a title followed by two possible \\
 structures either title or subsection. \\ \\
 Finally we come to last part of our \LaTeX ML, namespace. Namespace differentiates our customized macros with others by adding a prefix to our \LaTeX ML constructor patterns. \\ \\
 \emph{RegisterNamespace(\$prefix, \$url) \\} 
 
 Congratulations for being able to follow this tutorial to the end. You should have everything you need to create a minimal document \LaTeX ML binding. After the processing the makefile, you should be able to see the generated XML in your current directory! \\
 
-\textbf{Reference} Bruce R. Miller, November 21, 2014 \emph{\LaTeX ML The Manual}
+\textbf{Reference} \\
+ I. Bruce R. Miller, November 21, 2014 \emph{\LaTeX ML The Manual} \\
+ II. 2006 - 2012 Philipp Lehman, \emph{biblatex}
+ % III. kwarc.bib
 
 \end{document}
