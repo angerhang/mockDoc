@@ -1,9 +1,11 @@
 \documentclass{book}
 \usepackage{listings}
-
+\usepackage{tcolorbox}
+\usepackage{hyperref} 
 \title{\textbf{How To Write A Minimal LaTeXML Binding}}
 \author{Author: Hang Yuan, Jinbo Zhang \\ \\ \\ Supervisor: Michael Kohlhase}
 
+\lstset{numbers=left, numberstyle=\tiny, stepnumber=1, numbersep=5pt,  breaklines=true, language=Octave}
 \begin{document}
 \maketitle
 
@@ -20,83 +22,106 @@ want to pick up using \LaTeX ML in the future, by going through how to construct
 binding step by step.  \\
 
 \large\paragraph  This document does not cover advanced topics related \LaTeX  ML, and thus if 
-you are interested in understanding how this and how that work, very likely the \LaTeX ML manual will
-serve your needs better. 
+you are interested the general theories, probably you can have the manual hand in hand with this 
+document to have a better comprehension between the theories and the application. In addition, I will refer you 
+to the particular chapters in the manual, when needed.
  
-\chapter{Understanding \LaTeX ML} 
+\chapter{Your First \LaTeX ML Document Class} 
 \section{Using LaTeXML}
-The first thing we want to talk about is, what aspects of \LaTeX ML we are going to cover, and then we will move onto the 
-workflow of creating your first \LaTeX\ document class binding. In this  tutorial, we  use command:\\ \\
-\textbf{latexml} for converting \TeX \ document into *.XML \\ \\
-The general command for conversion is \\ \\
-\textbf{latexml} {options} --destination=doc.xml doc \\ \\
-Or simply you only supply with the \TeX\ file and the result will be standard output which is totally fine as well,
-based on your needs. \\
-One quick note here about \LaTeX ML installation, when you think you have finished installing \LaTeX ML, run
-a simple conversion command within mockDoc.tex's directory. You should be able to see an XML interpretation of
-mockDoc.tex either in a form a standard output or a newly-generated XML file. If you have something that differs from
-the expected and you have already checked your \LaTeX ML package multiple times, maybe you have overlooked some prerequisites such as 
-libxml2 and libxslt. \\ \\
-\textbf{Note:}
-Now in order to make better use of our document class binding in the future, we need to know how \LaTeX ML 
-operates in different stages. The stages are like the following: Digestion , construction, rewriting, math parsing and serialization.
-However we are not going to discuss this in detail here. For the interested users, the \LaTeX ML manual is a good source.
-\section{LaTeXML Binding}
-The conversion from \TeX\  to XML is processed by \LaTeX ML. Basically \LaTeX ML maps the \TeX \ makeup to
-the XML markup, more specifically macros, primitives and constructors. That's why you are able to customize the conversion 
-between \TeX\  and XML, in three ways, modifying the bindings used by \textbf{latexml}, adding your own bindings that has not been
-implemented, and even creating your own \TeX \ style and \LaTeX\  binding which is exactly the goal of this tutorial.
-\subsection{Minimal LaTeXML Structure}
-Since \LaTeX binding is essentially a Perl module, we need to initialize a binding file by add the followings in the beginning of the document class:
+We are going to talk about various aspects of \LaTeX ML, and then we will move onto the 
+workflow of creating your first \LaTeX\ document class binding. In this tutorial, we use the command:
+
 \begin{lstlisting}
-package LaTeXML::Package::Pool; //load text package 
-use strict; // catch errors and stop when encounter one
-use LaTeXML::Package;
-
-//your customization here 
-
-use warnings; // give warnings
-1; //make sure Perl work properly 
+latexml
 \end{lstlisting}
 
-We always need to load Tex.pool binding and possibly LaTex.pool as well in the beginning. \LaTeX ML packages are just like the 
-style and class files in \TeX\  and they have an extension of \emph{.ltxml}. We load our \LaTeX binding juts like how we load our 
-class file in \TeX . In our case we would like to load \emph{doc.cls.ltxml}, and therefore we use \emph{\textbackslash documentclasss\{doc\}},
-similarly, if you would like to load a doc type doc.sty.ltxml, you only need to include \emph{\textbackslash use package\{doc\}} in your .tex 
-file.
+ for converting \TeX \ document into *.sml 
+One quick note in regards to \LaTeX ML installation, when you think you have finished installing \LaTeX ML, run
+a simple conversion command within mockDoc.tex's directory. You should be able to see an XML interpretation of
+mockDoc.tex either in a form a standard output or a newly-generated XML file. It is totally fine to see tons of mysterious 
+error messages at this point, because we have created anything yet. Under some circumstances when your \LaTeX ML doesn't seem
+to function, maybe you have overlooked the prerequisites such as libxml2 and libxslt. \\
 
-\section{Construction \& Constructors}
-As we are interested in the conversion to XML, we need to understand how constructors works. \\ \\
-\textbf{DefConstructor} \emph{ (\$prototype, \$replacement, \$options) } \\ \\
-\textbf{DefConstructor}(`\ \textbackslash section{}', ``\textless mock:section\textgreater\textless mock:title\textgreater \#1\textless/mock:title\textgreater");
-The prototype is the control sequence you have defined in your \emph{.tex} file, and the replacement is what you want it to be built in your XML file. There 
-are options that need to be passed. In our doc.cls.ltxml, it is important to include \\ \\
- \emph {beforeDigest =\textless sub \{ AssignValue(inPreamble =\textless 0);\}} \\ \\
- for it makes sure that there spaces between words in the generated XML file. For other similar options, you might not necessarily be able to find them in 
- the manual, albeit, you can go one step further by looking at the other built in bindings such as \emph {article.cls.ltxml} and the \emph {pool} package. \\ \\
- One other error you might encounter when creating a biding from scratch is the constructor for new line. The macro for new line in \TeX is  \emph{\textbackslash\textbackslash}. \\
- It does not necessarily mean you are able to customize  \emph{\textbackslash\textbackslash}, due to some predefinition in the \emph {pool} package, which explains 
- why we change our the conventional  \emph{\textbackslash\textbackslash} in \emph{mockDoc} into \emph{ \textbackslash newline}. The same method can be considered
- as one possible solution for some \emph{malformed} errors.
+\begin{tcolorbox}
+\emph{For more information about how to use \LaTeX ML, please have a look at the \LaTeX MLmanual chapter 2:Using \LaTeX ML.}
+\end{tcolorbox}
 
-\section{Document Model}
-After customizing how \TeX  is translated into XML. There are three more schema to include: RelaxNGSchema, RegisterNamespace, and Tag.
-\subsection{RelaxNGSchema}
-The constructors tell \LaTeX ML to add a replacement into XML when it detects a prototype in the \emph{.tex} file. The question is it doesn't tell
-where the tag should be closed, and therefore we introduce \\ \\
- \emph{Tag(\$Tag,\$properties)} \\ \\
- meaning whenever there is new paragraph, the last paragraph tag will be closed, before the new paragraph tag can be added. RelaxNGSchema
- tells how the whole document class in constructed, such that when we want to create our own document structure, RelaxNGschema is quite important. \\ \\
- \LaTeX ML is unable to process the compact form which has an extension of .rnc but .rng. It makes your life easier to write in compact form nevetnhelress.
- The trick is to convert your .rnc in to .rng using trang. \\ \\ 
- In a schema file, pretty much you are defining in what elements can be included in different bodies. 
- As you can see in \emph{mockDoc.rnc} file. We need to register our namespace first, which we need to do later in \LaTeX ML file as well.
- The the definition of paragraph tells \LaTeX ML, in a paragraph it has two elements that are title and p. Likewise, section contains a title followed by two possible \\
-structures either title or subsection. \\ \\
-Finally we come to last part of our \LaTeX ML, namespace. Namespace differentiates our customized macros with others by adding a prefix to our \LaTeX ML constructor patterns. \\ \\
-\emph{RegisterNamespace(\$prefix, \$url) \\} 
+\section{How to Create A LaTeXML Binding}
+The conversion from \TeX\  to XML is processed by \LaTeX ML. Basically \LaTeX ML maps the \TeX \ markups to
+the XML markups, more specifically macros, primitives and constructors. That's why you are able to customize the conversion 
+between \TeX\  and XML, in three ways, modifying the bindings used by \textbf{latexml}, adding your own bindings that has not been
+implemented, and even creating your own \TeX \ style and \LaTeX\  binding which is exactly the goal of this tutorial.
+\subsection{Things We need}
+It probably would be a good idea to name every file after the same prefix which will make your life easier in the future. We need to have:\\ 
 
-Congratulations for being able to follow this tutorial to the end. You should have everything you need to create a minimal document \LaTeX ML binding. After the processing the makefile, you should be able to see the generated XML in your current directory! \\
+*.tex  as your source file, so you can have something to convert from. You can write down whatever you want and based on 
+this .tex file, your other files will vary. Feel free to define your own macros into something unusual such that, even if you accidentally load the
+\TeX\ binding in \LaTeX ML, the conversion will fail, ensuring all the conversion is done by our \LaTeX ML binding; \\ \\
+
+ *.cls for \LaTeX pdf which essentially helps you to see what our .tex file is like in a pdf format, since pdflatex is unable to process the customized macros and things alike; \\ \\
+
+*.cls.ltxml your \LaTeX ML binding, similar to the *.doc.cls you have for \LaTeX, but used for the conversion to other formats ; \\ \\
+
+*.rnc The RelaxNG schema compact form, which defines the structure of your .tex, crucial for executing tasks like placing the tags correctly and auto closing the tags when needed; \\ \\
+
+trang.jar(optional): \LaTeX ML  cannot process the compact form scheme, and therefore you need trang to convert your .rnc into .rng, unless you 
+want to write your scheme in .rng from the first, albeit this approach is not recommended for lack of efficiency and diffculty of maintenance; \\ \\
+
+After you have finished writing all the documents above, run \LaTeX ML, and then you should be able to see the converted xml of your .tex. In the following 
+chapters I will explain how to construct your *.doc.ltxml and *.rnc and the dos and don'ts detail 
+
+\subsection{Minimal \LaTeX ML}
+Since \LaTeX binding is a Perl module, we need to initialize a binding file by add the followings in the beginning of the document class: \\
+\lstinputlisting[firstline=1,lastline=4]{doc.cls.ltxml} 
+At the end of \LaTeX ML don't forget to include \\
+\begin{lstlisting}
+1;
+\end{lstlisting}
+to make sure Perl work properly.
+These are just the must dos, one has to follow. If you don't understand them, it is OK for now. Just use them and they work.
+The meat of \LaTeX ML bindings come form the construction and constructors.\\ 
+
+\begin{tcolorbox}
+{\emph{It will be good idea to read the manual Chapter 4: Customization, before
+your proceed and come back to see how the theories are implemented.}}
+\end{tcolorbox}
+
+Assuming you have read chapter 4 thoroughly, and get some feelings about how things work. Now you want to teach \LaTeX ML the new commands
+you created in your .tex file. Let's look at an example below:\\
+
+\begin{lstlisting}
+DefConstructor(`\newline ',``<mock:break/>");
+\end{lstlisting}
+
+The reason why I use the break as an example  is because you might encounter problems dealing with break in \LaTeX ML. The two backlashes macro is preserved in pool package, that's why if you still use the regular newline break macro, your \LaTeX ML will have a malformed error. Renaming your newline macro in your .tex will solve the problem for you.
+
+After you link your .tex file and .cls.ltxml file by changing your document class in your .tex into your \LaTeX ML binding name, in our case ``doc". \LaTeX ML will load your binding file, when it tries to do the conversion.\\ \\
+You might be wondering how \LaTeX ML reads your biding. To put it in a simple way, during the conversion process, whenever \LaTeX ML encounters a macro or control sequence, it will look for its replacement in your binding and then put the replacement in xml. This is where things get a little tricky. How about the closing tag? Just like section macro, you declare where the section starts and were the next section starts, nevertheless, you never write now close section, so \LaTeX ML will never close the section tags? Yes and no. Indeed \LaTeX ML will have no clue of where to close the declared tags if we don't tell it when to do so. I solve the problem by using auto-\textgreater which has something to do with your scheme.
+
+\subsection{RelaxNG Schema}
+Schema is a crucial document that decides how the xml is constructed. When you are creating your own schema, it is a good idea to have your .tex document open side by side to make sure your scheme works well with your 
+.tex file. \\ \\
+One good approach to test this is to create your expected xml output according to your .tex and then validate the 
+test xml with your scheme. You can easily accomplish this by using emacs nxml mode in which you have the freedom 
+to write your expected xml, while validating your xml at the same time. If validation fails, you can see the error message instantly, such that you can debug your xml or schema accordingly.
+\begin{tcolorbox}
+Tutorial: \href{http://www.emacswiki.org/emacs/NxmlMode}{Emacs: Nxml Mode} 
+\end{tcolorbox} 
+
+In our mockDoc.rnc, you can easily see under a document, there can be either p or section and under a section there can be the possibilities of having a title followed by p or a title followed by a subsection. The reason for this is because in mockDoc.tex in the first section, there is no subsection but text directly but in the other sections, there are subsections. What I am trying to say is, in your schema you need to consider all kinds of possible hierarchy of your elements.
+
+\begin{tcolorbox}
+Before you write your expected xml and RelaxNG schema, having a look at the links below can be beneficial: \\ \\
+I.\href{http://relaxng.org/compact-tutorial-20030326.html}{RelaxNG Syntax Tutorial}; \\ \\
+II. \href{http://www.w3schools.com/xml/}{XML tutorialsl}. 
+\end{tcolorbox} 
+
+\paragraph{Some more improvements:} If you have followed what I said, very likely you still have many errors when you use \LaTeX ML to compile your files. Don't be frustrated by this, when I tried to make my first binding, this "HowTo" didn't exit at all. The success is within a reach. We only need to deal with two more things, namespace and putting spaces in your text. 
+
+We have a default namespace in the schema and we need to declare the schema in the binding and associate the prefix with the namespace. That's an easy step. Then we come to the obscure command of putting spaces between two words. It is related to the architecture of \LaTeX ML, which is far beyond the scope of this tutorial. So you can just do what is in the doc.cls.ltxml.\\
+\lstinputlisting[firstline=11,lastline=11]{doc.cls.ltxml} 
+Now you should have a minimal setup of what is required for a \LaTeX ML biding. \\ \\ \\ \\ \\
+Congratulations for being able to follow this tutorial to the end. After the processing the makefile, you should be able to see the generated XML in your current directory which hopefully should look something similar to your expected XML! \\
 
 \textbf{Reference} \\
  I. Bruce R. Miller, November 21, 2014 \emph{\LaTeX ML The Manual} \\
