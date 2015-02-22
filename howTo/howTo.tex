@@ -16,7 +16,7 @@
 	breaklines=true
 }
 \title{\textbf{How To Write A Minimal \LaTeX ML Binding}}
-\author{Authors: Hang Yuan, Jinbo Zhang \\ \\Supervisor: Prof. Dr. Michael Kohlhase}
+\author{Authors: Hang Yuan, Jinbo Zhang \\ \\Co-author: Prof. Dr. Michael Kohlhase}
 \date{\today}
 \begin{document}
 \maketitle
@@ -26,7 +26,7 @@ Jacobs University Bremen
 \noindent\LaTeX\ has been widely used as a word processing tool among scholars, especially when one needs to use large quantities of mathematical representations. \LaTeX\ is also a good choice for those who are meticulous about typographical quality of documents. However, \LaTeX\ lacks a conversion tool to XML which DLMF(Digital Library of Mathematical Functions) uses for delivery. DLMF developed \LaTeX ML , trying to make a new typesetting system that allows users to be able to focus more on the content, but not the style, by providing extensive ways of customizations. In order to achieve this goal, building up the document class binding seems crucial, and yet \LaTeX ML seems fairly unfathomable for beginners. We want to make it easier for those who
 want to pick up using \LaTeX ML in the future, by going through how to construct a minimal \LaTeX ML binding step by step. \\
 
-\noindent This document does not cover advanced topics related \LaTeX ML, and thus if you are interested the general theories, probably you can have the manual hand in hand with this document to have a better comprehension between theories and applications. In addition, We will refer you to the particular chapters in the manual, when needed.
+\noindent This document does not cover advanced topics related \LaTeX ML, and thus if you are interested in the general theories, you can have the manual hand in hand with this document to better comprehend how the theories are implemented. In addition, we will refer you to the particular chapters in the manual, when needed.
 
 \section{Using LaTeXML}
 We are going to talk about various aspects of \LaTeX ML, and then we will move onto the workflow of creating your first \LaTeX\ document class binding. In this tutorial, we use the command:
@@ -36,27 +36,27 @@ latexmlc <Filename>  --format=XML --destination=<Filename> --log=<Filename>.log
 \end{lstlisting}
 for converting \TeX\ document into *.xml 
 One quick note in regards to \LaTeX ML installation, when you think you have finished installing \LaTeX ML, run a simple conversion command. You should be able to see an XML interpretation of \textit{mockDoc.tex} in a newly-generated XML file. It is totally fine to see tons of mysterious 
-error messages at this point, because we have created anything yet. Under some circumstances when your \LaTeX ML doesn't seem
+error messages at this point, because we have not created anything yet. Under some circumstances when your \LaTeX ML doesn't seem
 to function, maybe you have overlooked the prerequisites such as \texttt{libxml2} or \texttt{libxslt} \footnote{Please visit \url{http://dlmf.nist.gov/LaTeXML/get.html} for more information.}. \\
 
 \begin{tcolorbox}
 \emph{For more information about how to use \LaTeX ML, please have a look at the \href{http://dlmf.nist.gov/LaTeXML/manual.pdf}{\LaTeX ML Manual} Chapter 2: Using \LaTeX ML.}
 \end{tcolorbox}
 
-\section{How to Create A LaTeXML Binding}
-The conversion from \TeX\  to XML is processed by \LaTeX ML. Basically \LaTeX ML maps the \TeX \ markups to the XML markups, more specifically macros, primitives and constructors. That's why you are able to customize the conversion between \TeX\  and XML, in three ways: modifying the bindings used by \texttt{latexml}, adding your own bindings that has not been implemented, and even creating your own \TeX \ style and \LaTeX\  binding which is exactly the goal of this tutorial.
-\subsection{Things We need}
+\section{How to Create a LaTeXML Binding}
+The conversion from \TeX\  to XML is processed by \LaTeX ML. Basically \LaTeX ML maps the \TeX \ markups to the XML markups, more specifically macros, primitives and constructors. That's why you are able to customize the conversion between \TeX\  and XML, in three ways: modifying the bindings used by \texttt{latexml}, adding your own bindings that has not been implemented, and even creating your own \TeX \ style and \LaTeX\  binding which is the goal of this tutorial.
+\subsection{Things We Need}
 It probably would be a good idea to name every file after the same prefix which will make your life easier in the future. We need to have:
 \begin{itemize}
-\item[\texttt{*.tex}] As your source file, so you can have something to convert from. You can write down whatever you want and based on this \texttt{*.tex} file, your other files will vary. Feel free to define your own macros into something unusual such that, even if you accidentally load the \TeX\ binding in \LaTeX ML, the conversion will fail, ensuring all conversions are done by \LaTeX ML binding. \\
+\item[\texttt{*.tex}] As your source file, so you can have something to convert from. You can write down whatever you want and base on this \texttt{*.tex} file, your other files will vary. Feel free to define your own macros into something unusual such that, even if you accidentally load the \TeX\ binding in \LaTeX ML, the conversion will fail, ensuring all conversions are done by \LaTeX ML binding. \\
 
-\item[\texttt{*.cls}] For Xe\LaTeX, which essentially helps you to see what \texttt{*.tex} file looks like in a pdf format. \\ 
+\item[\texttt{*.cls}] For pdf\LaTeX, which essentially helps you to see what \texttt{*.tex} file looks like in a pdf format. \\ 
 
 \item[\texttt{*.cls.ltxml}] \LaTeX ML binding, similar to the *.doc.cls you have for \LaTeX, but used for the conversion to other formats. \\
 
 \item[\texttt{*.rnc}] The RelaxNG schema compact form, which defines the structure of your .tex, crucial for executing tasks like placing the tags correctly and auto closing the tags when needed. \\
 
-\item[\texttt{trang.jar}](optional): \LaTeX ML cannot process the compact form scheme, and therefore you need \texttt{trang.jar} to convert your \texttt{*.rnc} into \texttt{*.rng}, unless you want to write your scheme in \texttt{*.rng} from the first, albeit this approach is not recommended for lack of efficiency and diffculty of maintenance.
+\item[\texttt{trang.jar}](optional): \LaTeX ML cannot process the compact form scheme, and therefore you need \texttt{trang.jar} to convert your \texttt{*.rnc} into \texttt{*.rng}, unless you want to write your scheme in \texttt{*.rng} in the first place, albeit this approach is not recommended for lack of efficiency and difficulty of maintenance.
 \end{itemize}
 
 \noindent After you have finished writing all the documents above, run \texttt{latexml}, and then you should be able to see the converted XML file for your \texttt{*.tex}. In the following chapters I will explain how to construct your \texttt{*.doc.ltxml} and \texttt{*.rnc}.
