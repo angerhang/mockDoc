@@ -80,15 +80,15 @@ to make sure perl work properly.
 your proceed and come back to see how the theories are implemented.}}
 \end{tcolorbox}
 
-\noindent Assuming you have read chapter 4 thoroughly, and get some feelings about how things work. Now you want to teach \LaTeX ML the new commands you created in your \texttt{*.tex} file. Let's look at an example below:\\
+\noindent Let's assume you have read chapter 4 thoroughly, and already have some feelings about how things work.  The next task is to teach \LaTeX ML the new commands you created in your \texttt{*.tex} file. Maybe it's time to look at an example:\\
 
 \begin{lstlisting}
 DefConstructor('\newline',"<mock:break/>");
 \end{lstlisting}
 
-\noindent The reason why I use the break as an example is because you might encounter problems dealing with break in \LaTeX ML. The two backlashes macro is preserved in pool package, that's why if you still use the regular newline break macro, your \LaTeX ML will have a malformed error. Renaming your newline macro in your \texttt{*.tex} will solve the problem for you.\\
+\noindent The reason why I use the break as an example is because you might encounter problems dealing with break in \LaTeX ML. The two backlashes macro is preserved in the pool package. That's why if you still use the regular newline break macro, your \LaTeX ML will have a malformed error. Renaming your newline macro in your \texttt{*.tex} will solve the problem.\\
 
-\noindent After you link your \texttt{*.tex} file and \texttt{*.cls.ltxml} file by changing your document class in your \texttt{*.tex} into your \LaTeX ML binding name, in our case,``doc". \LaTeX ML will load your binding file, when it tries to do the conversion.\\
+\noindent After you link the \texttt{*.tex} file and the \texttt{*.cls.ltxml} file by changing your document class in your \texttt{*.tex} into your \LaTeX ML binding name, in our case,``doc". \LaTeX ML will load your binding file, when it tries to do the conversion.\\
 
 \noindent You might be wondering how \LaTeX ML reads your binding. To put it in a simple way, during the conversion process, whenever \LaTeX ML encounters a macro or control sequence, it will look for its replacement in your binding and then put the replacement in \texttt{*.xml}. This is where things get a little tricky. How about the closing tag? Just like \textbf{section} macro, you declare where the \textbf{section} starts and were the next \textbf{section} starts, nevertheless, you never write now close section, so \LaTeX ML will never close the section tags? Yes and no. Indeed \LaTeX ML will have no clue of where to close the declared tags if we don't tell it when to do so. Using a schema can solve this problem.
 
