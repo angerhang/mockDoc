@@ -52,9 +52,9 @@ It probably would be a good idea to name every file after the same prefix which 
 
 \item[\texttt{*.cls}] For pdf\LaTeX, which essentially helps you to see what \texttt{*.tex} file looks like in a pdf format. \\ 
 
-\item[\texttt{*.cls.ltxml}] \LaTeX ML binding, similar to the *.doc.cls you have for \LaTeX, but used for the conversion to other formats. \\
+\item[\texttt{*.cls.ltxml}] \LaTeX ML binding, similar to the \texttt{*.doc.cls} you have for \LaTeX, but used for the conversion to other formats. \\
 
-\item[\texttt{*.rnc}] The RelaxNG schema compact form, which defines the structure of your .tex, crucial for executing tasks like placing the tags correctly and auto closing the tags when needed. \\
+\item[\texttt{*.rnc}] The RelaxNG schema compact form, which defines the structure of your \texttt{*.tex}, crucial for executing tasks like placing the tags correctly and auto closing the tags when needed. \\
 
 \item[\texttt{trang.jar}](optional): \LaTeX ML cannot process the compact form scheme, and therefore you need \texttt{trang.jar} to convert your \texttt{*.rnc} into \texttt{*.rng}, unless you want to write your scheme in \texttt{*.rng} in the first place, albeit this approach is not recommended for lack of efficiency and difficulty of maintenance.
 \end{itemize}
@@ -107,7 +107,7 @@ I.\href{http://relaxng.org/compact-tutorial-20030326.html}{RelaxNG Syntax Tutori
 II. \href{http://www.w3schools.com/xml/}{XML tutorial}. 
 \end{tcolorbox} 
 
-\paragraph{Some more improvements:} If you have followed what we said, very likely you still have many errors when you use \LaTeX ML to compile your files. Don't be frustrated by this, when we tried to make our first binding, it didn't exit at all. The success is within a reach. We only need to deal with two more things, namespace and putting spaces in your text. 
+\paragraph{Some more improvements:} If you have followed what we said, very likely you still have many errors when you use \LaTeX ML to compile your files. Don't be frustrated by this, when we tried to make our first binding, it didn't exit at all. The success is within a reach. We only need to deal with two more things, namespace and putting spaces in your text.\\
 
 \noindent We have a default namespace in the schema and we need to declare the schema in the binding and associate the prefix with the namespace. That's an easy step. Then we come to the obscure command of putting spaces between two words. It is related to the architecture of \LaTeX ML, which is far beyond the scope of this tutorial. So you can just do what is in the doc.cls.ltxml.\\
 \lstinputlisting[firstline=11,lastline=11]{doc.cls.ltxml} 
