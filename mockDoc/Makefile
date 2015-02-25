@@ -17,4 +17,4 @@ $(XML): %.xml: %.tex mockDoc.rng doc.cls.ltxml
 	latexmlc $<  --format=XML --destination=$@ --log=$@.log
 
 $(PDF): %.pdf: %.tex doc.cls
-	pdflatex $<
+	xelatex $<
