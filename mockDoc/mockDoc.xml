@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?latexml searchpaths="/home/la_stravaganza/repos/mockDoc/secondTrial"?>
+<?latexml searchpaths="/home/la_stravaganza/repos/mockDoc/mockDoc"?>
 <?latexml class="doc"?>
 <?latexml RelaxNGSchema="mockDoc.rng"?>
 <mock:document xmlns:mock="https://kwarc.info/projects/mockDoc">
