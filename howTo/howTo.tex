@@ -5,6 +5,7 @@
 \usepackage{xcolor}
 \usepackage{hyperref}
 \usepackage{url}
+\usepackage[show]{ed}
 \definecolor{WhiteSmoke}{HTML}{F5F5F5}
 \definecolor{BlueViolet}{HTML}{8A2BE2}
 \definecolor{Sienna}{HTML}{A0522D}
@@ -17,17 +18,42 @@
 	backgroundcolor=\color{WhiteSmoke},
 	breaklines=true
 }
+
+\lstdefinelanguage{RNC}%
+  {morekeywords={default,namespace,=,start,attribute,include,element,notallowed},
+   alsoother=$,%
+   alsoletter=:,%
+   showstringspaces=false,
+   sensitive=true}
+
+\lstdefinelanguage{mock}[]{XML}%
+  {morekeywords={mock:document,mock:section,mock:subsection,mock:paragraph,mock:title,mock:p},
+   sensitive=true}
+%$
+
 \title{\textbf{How To Write A Minimal \LaTeX ML Binding}}
 \author{\href{mailto:h.yuan@jacobs-university.de}{Hang Yuan} \and 
-	\href{mailto:jin.zhang@jacobs-university.de}{Jinbo Zhang} \and \href{mailto:m.kohlhase@jacobs-university.de}{Michael Kohlhase}}
+	\href{mailto:jin.zhang@jacobs-university.de}{Jinbo Zhang} \and
+        \href{mailto:m.kohlhase@jacobs-university.de}{Michael Kohlhase}\\
+Computer Science, Jacobs University Bremen}
 \date{}
 \begin{document}
 \maketitle
-\begin{center}
-Computer Science, Jacobs University Bremen\\
-\end{center}
-\noindent\LaTeX\ has been widely used as a word processing tool among scholars, especially when one needs to use large quantities of mathematical representations. \LaTeX\ is also a good choice for those who are meticulous about typographical quality of documents. However, \LaTeX\ lacks a converter tool to XML. The DLMF (Digital Library of Mathematical Functions) developed \LaTeX ML, trying to make a new typesetting system that allows users to be able to focus more on the contents, not the style, by providing extensive ways of customizations. In order to achieve this goal, building up the bindings is crucial, and yet \LaTeX ML seems fairly unfathomable for beginners. We want to make it easier for those who
-want to pick up using \LaTeX ML in the future, by going through how to construct a minimal \LaTeX ML binding step by step. We will use \textit{mockDoc} \footnote{mockDoc project in Github: \url{https://github.com/angerhang/mockDoc}} as a sample in this tutorial. This tutorial does not cover advanced topics related to \LaTeX ML, and thus if you are interested in the general theories, please explore the \LaTeX ML Manual~\cite{manual} to better comprehend how the theories are implemented.
+
+\LaTeX\ has been widely used as a word processing tool among scholars, especially when one
+needs to use large quantities of mathematical representations. \LaTeX\ is also a good
+choice for those who are meticulous about typographical quality of documents. However,
+\LaTeX\ lacks a converter tool to XML. The DLMF (Digital Library of Mathematical
+Functions) developed \LaTeX ML, trying to make a new typesetting system that allows users
+to be able to focus more on the contents, not the style, by providing extensive ways of
+customizations. In order to achieve this goal, building up the bindings is crucial, and
+yet \LaTeX ML seems fairly unfathomable for beginners. We want to make it easier for those
+who want to pick up using \LaTeX ML in the future, by going through how to construct a
+minimal \LaTeX ML binding step by step. We will use \textit{mockDoc} \footnote{mockDoc
+  project in Github: \url{https://github.com/angerhang/mockDoc}} as a sample in this
+tutorial. This tutorial does not cover advanced topics related to \LaTeX ML, and thus if
+you are interested in the general theories, please explore the \LaTeX ML
+Manual~\cite{manual} to better comprehend how the theories are implemented.
 
 \section{Using LaTeXML}
 We are going to talk about various aspects of \LaTeX ML, and then we will move onto the workflow of creating your first \LaTeX ML binding. In this tutorial, we use the command:
@@ -36,7 +62,7 @@ latexmlc mockDoc.tex --format=XML --destination=mockDoc.xml --log=mockDoc.xml.lo
 \end{lstlisting}
 for converting \texttt{mockDoc.tex} into \texttt{mockDoc.xml}. \\
 
-\noindent \textbf{Note}: Regarding \LaTeX ML installation, when you think you have finished installing \LaTeX ML, run a simple command:
+ \textbf{Note}: Regarding \LaTeX ML installation, when you think you have finished installing \LaTeX ML, run a simple command:
 \begin{lstlisting}
 latexml your_sample.tex
 \end{lstlisting}
@@ -46,23 +72,20 @@ to test it. You should be able to see an XML interpretation of \texttt{your\_sam
 The conversion from \LaTeX\ to XML is processed by \LaTeX ML. Basically \LaTeX ML maps the \LaTeX\ markups to the XML markups, more specifically: macros, primitives and constructors. 
 \subsection{Things We Need}
 \begin{itemize}
-\item[\texttt{mockDoc.tex}] As your source file. You can write down whatever you want.\\
-
-\item[\texttt{doc.cls}] For Xe\LaTeX, which essentially helps you to see what \texttt{mockDoc.tex} file looks like in a pdf format. This file won't be illustrated in this tutorial.\\ 
-
-\item[\texttt{doc.cls.ltxml}] \LaTeX ML binding, the core file of this tutorial. \texttt{doc.cls.ltxml} is similar to \texttt{doc.cls} , but used for the conversion to other formats. \\
-
-\item[\texttt{mockDoc.rnc}] The schema in compact form, which defines the structure of \texttt{mockDoc.tex}, crucial for executing tasks like placing the tags correctly and auto closing the tags when needed. \\
-
+\item[\texttt{mockDoc.tex}] As your source file. You can write down whatever you want. A
+  minimal example\ednote{MK: make a minimal one, use that here } can be found in appendix
+  \ref{app:ex}\ednote{make other references}
+\item[\texttt{doc.cls}] For Xe\LaTeX, which essentially helps you to see what \texttt{mockDoc.tex} file looks like in a pdf format. This file won't be illustrated in this tutorial.
+\item[\texttt{doc.cls.ltxml}] \LaTeX ML binding, the core file of this tutorial. \texttt{doc.cls.ltxml} is similar to \texttt{doc.cls} , but used for the conversion to other formats. 
+\item[\texttt{mockDoc.rnc}] The schema in compact form, which defines the structure of \texttt{mockDoc.tex}, crucial for executing tasks like placing the tags correctly and auto closing the tags when needed. 
 \item[\texttt{trang.jar}] \LaTeX ML cannot process the compact form schema, therefore you need \texttt{trang.jar} to convert \texttt{mockDoc.rnc} into \texttt{mockDoc.rng}. The reason for writing \texttt{mockDoc.rnc} instead of \texttt{mockDoc.rng} is that, \texttt{mockDoc.rnc} is much shorter and easier to maintain. 
 \end{itemize}
-
-\noindent After you have finished writing all the documents above, run the command mentioned before, and then you should be able to see the converted XML file for \texttt{mockDoc.tex}. In the following chapters we will explain how to construct \texttt{mockDoc.rnc} and \texttt{doc.cls.ltxml}.
+After you have finished writing all the documents above, run the command mentioned before, and then you should be able to see the converted XML file for \texttt{mockDoc.tex}. In the following chapters we will explain how to construct \texttt{mockDoc.rnc} and \texttt{doc.cls.ltxml}.
 
 \subsection{RelaxNG Schema}
 Schema is a crucial document that decides how \texttt{mockDoc.xml} is constructed. When you are creating your own schema\footnote{Before you write your expected xml and schema, having a look at the links below can be beneficial: \url{http://relaxng.org/compact-tutorial-20030326.html}; \url{http://www.w3schools.com/xml/}. }, one good approach to test this is to create your expected \texttt{mockDoc\_sample.xml} by hand, according to your \texttt{mockDoc.tex}, then compare \texttt{mockDoc\_sample.xml} with the generated \texttt{mockDoc.xml}. You can easily accomplish this by using \textit{emacs nxml mode}\footnote{Here is a tutorial about Emacs nxml mode: \url{http://www.emacswiki.org/emacs/NxmlMode}}, in which you have the freedom to write your expected \texttt{mockDoc.xml}, while validating your \texttt{mockDoc.xml} at the same time. If validation fails, you can see the error message instantly, such that you can debug your \texttt{mockDoc.xml} or schema accordingly.\\
 
-\noindent In our \texttt{mockDoc.rnc}:
+ In our \texttt{mockDoc.rnc}:
 \begin{lstlisting}
 document = element document {p, section*}
 section = element section {title,(p |subsection)*}
@@ -80,10 +103,10 @@ Actually this binding is not the smallest one in the world, in \texttt{doc.cls.l
 \textbf{1 environment}: \texttt{document}\\
 \indent \textbf{4 control sequences}: \texttt{\textbackslash section, \textbackslash subsection, \textbackslash paragraph, \textbackslash newline}\\
 
-\noindent After you link \texttt{mockDoc.tex} and \texttt{doc.cls.ltxml} by changing your document class in your \texttt{mockDoc.tex} into your \LaTeX ML binding name, in our case,``doc". Put \texttt{doc.cls.ltxml} and \texttt{mockDoc.tex} in the same folder, \LaTeX ML will load your binding file automatically, when it tries to do the conversion.\\
+ After you link \texttt{mockDoc.tex} and \texttt{doc.cls.ltxml} by changing your document class in your \texttt{mockDoc.tex} into your \LaTeX ML binding name, in our case,``doc". Put \texttt{doc.cls.ltxml} and \texttt{mockDoc.tex} in the same folder, \LaTeX ML will load your binding file automatically, when it tries to do the conversion.\\
 
 \subsubsection{Basic structure}
-\noindent Since \LaTeX\ binding is a perl module, we need to initialize a binding file by adding the followings in the beginning of \texttt{doc.cls.ltxml}: 
+ Since \LaTeX\ binding is a perl module, we need to initialize a binding file by adding the followings in the beginning of \texttt{doc.cls.ltxml}: 
 \begin{lstlisting}[language=Perl]
 package LaTeXML::Package::Pool;
 use strict;
@@ -97,7 +120,7 @@ At the end of \texttt{doc.cls.ltxml}, don't forget to include
 to make sure that perl works properly.\\
 
 \subsubsection{Configure namespace}
-\noindent With:
+ With:
 \begin{lstlisting}
 RegisterNamespace('mock'=>"https://kwarc.info/projects/mockDoc");
 RelaxNGSchema("mockDoc.rng",'mock'=>"https://kwarc.info/projects/mockDoc");
@@ -105,15 +128,15 @@ RelaxNGSchema("mockDoc.rng",'mock'=>"https://kwarc.info/projects/mockDoc");
 We declared the namespace associated the prefix \texttt{mock} with the namespace.\\
 
 \subsubsection{Define \textbackslash newline}
-\noindent The next task is to teach \LaTeX ML new commands used in \texttt{mockDoc.tex}. Here is an example:
+ The next task is to teach \LaTeX ML new commands used in \texttt{mockDoc.tex}. Here is an example:
 \begin{lstlisting}
 DefConstructor('\newline',"<mock:break/>");
 \end{lstlisting}
 
-\noindent This line defines how \LaTeX ML interprets \texttt{\textbackslash newline}, as you see, \LaTeX ML will translate \texttt{\textbackslash newline} to \texttt{<mock:break/>} in \texttt{mockDoc.xml}.\\
+ This line defines how \LaTeX ML interprets \texttt{\textbackslash newline}, as you see, \LaTeX ML will translate \texttt{\textbackslash newline} to \texttt{<mock:break/>} in \texttt{mockDoc.xml}.\\
 
 \subsubsection{Define \textbackslash section}
-\noindent When dealing with \texttt{section}, things get a little tricky, with:
+ When dealing with \texttt{section}, things get a little tricky, with:
 \begin{lstlisting}
 DefConstructor('\section{}', "<mock:section><mock:title>#1</mock:title>");
 \end{lstlisting}
@@ -134,7 +157,7 @@ DefEnvironment('{document}', "<mock:document>#body</mock:document>", beforeDiges
 \end{lstlisting}
 This code can prevent the error mentioned before, however, the mechanism of the \texttt{beforeDigest} part is out of our dicussion in this tutorial.\\
 
-\noindent For an environment, we don't need care about autoclosing, since an environment is always like
+ For an environment, we don't need care about autoclosing, since an environment is always like
 \begin{lstlisting}
 \begin{*environment-name*}
 content...
@@ -150,11 +173,41 @@ Tag('mock:p', autoOpen=>1);
 which will surround such texts.\\
 
 \section{Conclusion}
-\noindent Thank you for following this tutorial to the end. After processing the \texttt{makefile}, with command:
+Thank you for following this tutorial to the end. After processing the \texttt{makefile}
+(see ~\cite{app:mk}), with command:
 \begin{lstlisting}[language=bash]
 make
 \end{lstlisting}
-you should be able to see the generated \texttt{mockDoc.xml} in your current directory. It should be something similar to your expected \texttt{mockDoc\_sample.xml}. \\
-\bibliographystyle{plain}
+you should be able to see the generated \texttt{mockDoc.xml} in your current directory. It
+should be something similar to your expected \texttt{mockDoc\_sample.xml}. 
+
+\bibliographystyle{alpha}
 \bibliography{howTo}
+
+\begin{appendix}
+\section{mockDoc Example}\label{app:ex}
+\lstinputlisting[language={[LaTeX]TeX}]{mockDoc.tex}
+
+\section{The mockDoc Class}\label{app:cls}
+\lstinputlisting[language={[LaTeX]TeX}]{doc.cls}
+
+\section{The mockDoc Class Binding}\label{app:ltxml}
+\lstinputlisting[language=Perl]{doc.cls.ltxml}
+
+\section{mockDoc RelaxNG schema}\label{app:rnc}
+\lstinputlisting[language=RNC]{mockDoc.rnc}
+
+\section{Generate XML}\label{app:rnc}
+\lstinputlisting[language=mock]{mockDoc.xml}
+
+\section{A Makefile for Automation}\label{app:mk}
+\lstinputlisting[language=bash]{Makefile}
+\end{appendix}
 \end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:
+
+%  LocalWords:  maketitle noindent
