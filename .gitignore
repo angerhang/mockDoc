@@ -3,3 +3,7 @@ auto
 *.log
 *.synctex.gz
 *.out
+*-blx.bib
+*.bbl
+*.blg
+*.run.xml
