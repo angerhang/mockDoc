@@ -78,7 +78,8 @@ version of this tutorial )are available from~\cite{mockDoc:git}, but are also in
 the appendix of this document for reference.
 
 This how-to tutorial is structured as follows: Section~\ref{sec:using} briefly reviews
-\latexml workflows and the files involved.
+\latexml workflows and the files involved.\ednote{MK: continue, when the struture is
+  fixed} Section~\ref{sec:concl} concludes the tutorial.
 
 
 \section{Using LaTeXML}\label{sec:using}
@@ -91,7 +92,8 @@ command
 \begin{lstlisting}[language=bash]
 latexmlc mockDoc.tex --format=XML --destination=mockDoc.xml --log=mockDoc.xml.log
 \end{lstlisting}
-for converting \lstinline|mockDoc.tex| into \lstinline|mockDoc.xml|.
+for converting \lstinline|mockDoc.tex| into \lstinline|mockDoc.xml|.\ednote{Actually, we
+  should also have a HTML step, so that this shows the stylesheet as well.}
 
 \begin{oldpart}{MK: I do not think that this has any role here; what are you trying to
     achieve with this?}
@@ -291,6 +293,16 @@ which will surround such texts.
 
 \section{Conclusion}\label{sec:concl}
 \ednote{MK: say something here}
+\begin{newpart}{MK: do not forget to discuss this somewhere}
+  For a web workflow, where the ultimate goal is to generate HTML5, writing a document
+  class from scratch may not be the most common workflow, since the majority of document
+  classes in {\LaTeX} are derived in some way from \lstinline|article.cls| and therefore
+  the \latexml bindings can inherit the from \lstinline|article.cls.ltmxl|, but in some
+  cases we want to use \latexml to generate other XML-based format. There we need the
+  techniques in this tutorial. Examples are generating OMDoc from s\TeX\ednote{MK: cite
+    them from kwarc.bib, are there others?}
+\end{newpart}
+
 \printbibliography
 \newpage
 
