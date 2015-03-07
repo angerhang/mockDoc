@@ -1,11 +1,18 @@
 \documentclass[a4paper]{article}
-\usepackage{listings}
+\usepackage[backend=bibtex,style=alphabetic]{biblatex}
+\addbibresource{howto.bib}
+
+\usepackage{a4wide}
+
 \usepackage{hyperref} 
 \usepackage{listings}
 \usepackage{xcolor}
 \usepackage{hyperref}
 \usepackage{url}
+\usepackage{xspace}
 \usepackage[show]{ed}
+
+\usepackage{listings}
 \definecolor{WhiteSmoke}{HTML}{F5F5F5}
 \definecolor{BlueViolet}{HTML}{8A2BE2}
 \definecolor{Sienna}{HTML}{A0522D}
@@ -31,93 +38,114 @@
    sensitive=true}
 %$
 
-\title{\textbf{How To Write A Minimal \LaTeX ML Binding}}
-\author{\href{mailto:h.yuan@jacobs-university.de}{Hang Yuan} \and 
-	\href{mailto:jin.zhang@jacobs-university.de}{Jinbo Zhang} \and
+\def\latexml{{\LaTeX}ML\xspace}
+
+\title{\textbf{How To Write A Minimal \latexml Binding}}
+\author{\href{mailto:h.yuan@jacobs-university.de}{Hang Yuan}, 
+	\href{mailto:jin.zhang@jacobs-university.de}{Jinbo Zhang},
         \href{mailto:m.kohlhase@jacobs-university.de}{Michael Kohlhase}\\
-Computer Science, Jacobs University Bremen}
+        Computer Science, Jacobs University Bremen}
 \date{}
 \begin{document}
 \maketitle
 
-\LaTeX\ has been widely used as a word processing tool among scholars, especially when one
-needs to use large quantities of mathematical representations. \LaTeX\ is also a good
-choice for those who are meticulous about typographical quality of documents. However,
-\LaTeX\ lacks a converter tool to XML. The DLMF (Digital Library of Mathematical
-Functions) developed \LaTeX ML, trying to make a new typesetting system that allows users
-to be able to focus more on the contents, not the style, by providing extensive ways of
-customizations. In order to achieve this goal, building up the bindings is crucial, and
-yet \LaTeX ML seems fairly unfathomable for beginners. We want to make it easier for those
-who want to pick up using \LaTeX ML in the future, by going through how to construct a
-minimal \LaTeX ML binding step by step. We will use \textit{mockDoc} \footnote{mockDoc
-  project in Github: \url{https://github.com/angerhang/mockDoc}} as a sample in this
-tutorial. This tutorial does not cover advanced topics related to \LaTeX ML, and thus if
-you are interested in the general theories, please explore the \LaTeX ML
-Manual~\cite{manual} to better comprehend how the theories are implemented.
+{\LaTeX}has been widely used as a document processor among scholars, especially when one
+needs to use large quantities of mathematical representations. {\LaTeX} is also a good
+choice for those who are meticulous about typographical quality of documents.
+
+As a page formatting tool, the primary output format of the {\LaTeX} formatter is PDF;
+which -- with fixed page formats and limited interaction features -- is only partially
+suited for usage in the modern web. The DLMF (Digital Library of Mathematical Functions)
+developed \latexml, a flexible, semantics-preserving {\LaTeX} to XML converter to fix
+this.
+
+However, for every {\LaTeX} class and package used in a document \latexml needs a
+\textbf{\latexml binding} -- a configuration file that specifies the XML counterpart of
+the {\LaTeX} command sequences provided by the respective class or package. 
+
+Even though the \latexml distribution provides bindings for the most commonly used classes
+and packages, the availability of bindings is still the most severe bottleneck for
+\latexml. The \latexml documentation~\cite{manual} is mostly written for developers and
+quite impenetrable for beginners.
+
+To encourage binding development this how-to document goes through the steps and pitfalls
+of creating a \latexml class binding from scratch. We have developed a minimal document
+class \lstinline|mockDoc| as an example for this how-to and will go through it
+step-by-step. All necessary files are available from ~\cite {mockDoc.git}, but are also
+included in the appendix of this document for reference.  
+
+This tutorial does not cover advanced topics related to \latexml, and thus if you are
+interested in the general theories, please explore the \latexml manual~\cite{manual} to
+better comprehend how the theories are implemented.
 
 \section{Using LaTeXML}
-We are going to talk about various aspects of \LaTeX ML, and then we will move onto the workflow of creating your first \LaTeX ML binding. In this tutorial, we use the command:
+We are going to talk about various aspects of \latexml, and then we will move onto the workflow of creating your first \latexml binding. In this tutorial, we use the command:
 \begin{lstlisting}[language=bash]
 latexmlc mockDoc.tex --format=XML --destination=mockDoc.xml --log=mockDoc.xml.log
 \end{lstlisting}
-for converting \texttt{mockDoc.tex} into \texttt{mockDoc.xml}. \\
+for converting \lstinline|mockDoc.tex| into \lstinline|mockDoc.xml|. 
 
- \textbf{Note}: Regarding \LaTeX ML installation, when you think you have finished installing \LaTeX ML, run a simple command:
+ \textbf{Note}: Regarding \latexml installation, when you think you have finished installing \latexml, run a simple command:
 \begin{lstlisting}
 latexml your_sample.tex
 \end{lstlisting}
-to test it. You should be able to see an XML interpretation of \texttt{your\_sample.tex} in screen immediately. Under some circumstances \LaTeX ML doesn't seem to work, maybe you fail to install the prerequisites such as \texttt{libxml2} or \texttt{libxslt} \footnote{Please visit \url{http://dlmf.nist.gov/LaTeXML/get.html} for more information.}. \\
+to test it. You should be able to see an XML interpretation of \lstinline|your\_sample.tex| in screen immediately. Under some circumstances \latexml doesn't seem to work, maybe you fail to install the prerequisites such as \lstinline|libxml2| or \lstinline|libxslt| \footnote{Please visit \url{http://dlmf.nist.gov/LaTeXML/get.html} for more information.}. 
 
 \section{How to Create a LaTeXML Binding}
-The conversion from \LaTeX\ to XML is processed by \LaTeX ML. Basically \LaTeX ML maps the \LaTeX\ markups to the XML markups, more specifically: macros, primitives and constructors. 
+The conversion from {\LaTeX} to XML is processed by \latexml. Basically \latexml maps the {\LaTeX} markups to the XML markups, more specifically: macros, primitives and constructors. 
 \subsection{Things We Need}
 \begin{itemize}
-\item[\texttt{mockDoc.tex}] As your source file. You can write down whatever you want. A
+\item[\lstinline|mockDoc.tex|] As your source file. You can write down whatever you want. A
   minimal example\ednote{MK: make a minimal one, use that here } can be found in appendix
   \ref{app:ex}\ednote{make other references}
-\item[\texttt{doc.cls}] For Xe\LaTeX, which essentially helps you to see what \texttt{mockDoc.tex} file looks like in a pdf format. This file won't be illustrated in this tutorial.
-\item[\texttt{doc.cls.ltxml}] \LaTeX ML binding, the core file of this tutorial. \texttt{doc.cls.ltxml} is similar to \texttt{doc.cls} , but used for the conversion to other formats. 
-\item[\texttt{mockDoc.rnc}] The schema in compact form, which defines the structure of \texttt{mockDoc.tex}, crucial for executing tasks like placing the tags correctly and auto closing the tags when needed. 
-\item[\texttt{trang.jar}] \LaTeX ML cannot process the compact form schema, therefore you need \texttt{trang.jar} to convert \texttt{mockDoc.rnc} into \texttt{mockDoc.rng}. The reason for writing \texttt{mockDoc.rnc} instead of \texttt{mockDoc.rng} is that, \texttt{mockDoc.rnc} is much shorter and easier to maintain. 
+\item[\lstinline|doc.cls|] For Xe\LaTeX, which essentially helps you to see what \lstinline|mockDoc.tex| file looks like in a pdf format. This file won't be illustrated in this tutorial.
+\item[\lstinline|doc.cls.ltxml|] \latexml binding, the core file of this tutorial. \lstinline|doc.cls.ltxml| is similar to \lstinline|doc.cls| , but used for the conversion to other formats. 
+\item[\lstinline|mockDoc.rnc|] The schema in compact form, which defines the structure of \lstinline|mockDoc.tex|, crucial for executing tasks like placing the tags correctly and auto closing the tags when needed. 
+\item[\lstinline|trang.jar|] \latexml cannot process the compact form schema, therefore you need \lstinline|trang.jar| to convert \lstinline|mockDoc.rnc| into \lstinline|mockDoc.rng|. The reason for writing \lstinline|mockDoc.rnc| instead of \lstinline|mockDoc.rng| is that, \lstinline|mockDoc.rnc| is much shorter and easier to maintain. 
 \end{itemize}
-After you have finished writing all the documents above, run the command mentioned before, and then you should be able to see the converted XML file for \texttt{mockDoc.tex}. In the following chapters we will explain how to construct \texttt{mockDoc.rnc} and \texttt{doc.cls.ltxml}.
+After you have finished writing all the documents above, run the command mentioned before, and then you should be able to see the converted XML file for \lstinline|mockDoc.tex|. In the following chapters we will explain how to construct \lstinline|mockDoc.rnc| and \lstinline|doc.cls.ltxml|.
 
 \subsection{RelaxNG Schema}
-Schema is a crucial document that decides how \texttt{mockDoc.xml} is constructed. When you are creating your own schema\footnote{Before you write your expected xml and schema, having a look at the links below can be beneficial: \url{http://relaxng.org/compact-tutorial-20030326.html}; \url{http://www.w3schools.com/xml/}. }, one good approach to test this is to create your expected \texttt{mockDoc\_sample.xml} by hand, according to your \texttt{mockDoc.tex}, then compare \texttt{mockDoc\_sample.xml} with the generated \texttt{mockDoc.xml}. You can easily accomplish this by using \textit{emacs nxml mode}\footnote{Here is a tutorial about Emacs nxml mode: \url{http://www.emacswiki.org/emacs/NxmlMode}}, in which you have the freedom to write your expected \texttt{mockDoc.xml}, while validating your \texttt{mockDoc.xml} at the same time. If validation fails, you can see the error message instantly, such that you can debug your \texttt{mockDoc.xml} or schema accordingly.\\
+Schema is a crucial document that decides how \lstinline|mockDoc.xml| is constructed. When you are creating your own schema\footnote{Before you write your expected xml and schema, having a look at the links below can be beneficial: \url{http://relaxng.org/compact-tutorial-20030326.html}; \url{http://www.w3schools.com/xml/}. }, one good approach to test this is to create your expected \lstinline|mockDoc\_sample.xml| by hand, according to your \lstinline|mockDoc.tex|, then compare \lstinline|mockDoc\_sample.xml| with the generated \lstinline|mockDoc.xml|. You can easily accomplish this by using \textit{emacs nxml mode}\footnote{Here is a tutorial about Emacs nxml mode: \url{http://www.emacswiki.org/emacs/NxmlMode}}, in which you have the freedom to write your expected \lstinline|mockDoc.xml|, while validating your \lstinline|mockDoc.xml| at the same time. If validation fails, you can see the error message instantly, such that you can debug your \lstinline|mockDoc.xml| or schema accordingly.
 
- In our \texttt{mockDoc.rnc}:
+ In our \lstinline|mockDoc.rnc|:
 \begin{lstlisting}
 document = element document {p, section*}
 section = element section {title,(p |subsection)*}
 \end{lstlisting}
-you can easily see that, under a \texttt{document}, there can be either \texttt{p} or \texttt{section}, and under a \texttt{section} there can be a \texttt{title} followed by \texttt{p} or a \texttt{title} followed by a \texttt{subsection}. This is because in the first section in \texttt{mockDoc.tex}:
+you can easily see that, under a \lstinline|document|, there can be either \lstinline|p| or \lstinline|section|, and under a \lstinline|section| there can be a \lstinline|title| followed by \lstinline|p| or a \lstinline|title| followed by a \lstinline|subsection|. This is because in the first section in \lstinline|mockDoc.tex|:
 \begin{lstlisting}[language=TeX]
 \section{A brief introduction about Shelley}
     Percy Bysshe Shelley (4 August 1792 -- 8 July 1822)...
 \end{lstlisting}
-there is no \texttt{subsection} but texts directly. But in the other \texttt{section}s, there are \texttt{subsection}s. In your schema you need to consider all kinds of possible hierarchy of your elements.
+there is no \lstinline|subsection| but texts directly. But in the other \lstinline|section|s, there are \lstinline|subsection|s. In your schema you need to consider all kinds of possible hierarchy of your elements.
 
-\subsection{Minimal \LaTeX ML}
-Actually this binding is not the smallest one in the world, in \texttt{doc.cls.ltxml} we covered:\\
+\subsection{Minimal \latexml}
+Actually this binding is not the smallest one in the world, in \lstinline|doc.cls.ltxml|
+we covered:
 
-\textbf{1 environment}: \texttt{document}\\
-\indent \textbf{4 control sequences}: \texttt{\textbackslash section, \textbackslash subsection, \textbackslash paragraph, \textbackslash newline}\\
+\textbf{1 environment}: \lstinline|document|\\
+\indent \textbf{4 control sequences}: \lstinline|\textbackslash section, \textbackslash subsection, \textbackslash paragraph, \textbackslash newline|
 
- After you link \texttt{mockDoc.tex} and \texttt{doc.cls.ltxml} by changing your document class in your \texttt{mockDoc.tex} into your \LaTeX ML binding name, in our case,``doc". Put \texttt{doc.cls.ltxml} and \texttt{mockDoc.tex} in the same folder, \LaTeX ML will load your binding file automatically, when it tries to do the conversion.\\
+After you link \lstinline|mockDoc.tex| and \lstinline|doc.cls.ltxml| by changing your
+document class in your \lstinline|mockDoc.tex| into your \latexml binding name, in our
+case,``doc". Put \lstinline|doc.cls.ltxml| and \lstinline|mockDoc.tex| in the same folder,
+\latexml will load your binding file automatically, when it tries to do the conversion.
 
 \subsubsection{Basic structure}
- Since \LaTeX\ binding is a perl module, we need to initialize a binding file by adding the followings in the beginning of \texttt{doc.cls.ltxml}: 
+Since {\LaTeX} binding is a perl module, we need to initialize a binding file by adding
+the followings in the beginning of \lstinline|doc.cls.ltxml|:
 \begin{lstlisting}[language=Perl]
 package LaTeXML::Package::Pool;
 use strict;
 use LaTeXML::Package;
 use warnings;
 \end{lstlisting}
-At the end of \texttt{doc.cls.ltxml}, don't forget to include
+At the end of \lstinline|doc.cls.ltxml|, don't forget to include
 \begin{lstlisting}
 1;
 \end{lstlisting}
-to make sure that perl works properly.\\
+to make sure that perl works properly.
 
 \subsubsection{Configure namespace}
  With:
@@ -125,64 +153,64 @@ to make sure that perl works properly.\\
 RegisterNamespace('mock'=>"https://kwarc.info/projects/mockDoc");
 RelaxNGSchema("mockDoc.rng",'mock'=>"https://kwarc.info/projects/mockDoc");
 \end{lstlisting}
-We declared the namespace associated the prefix \texttt{mock} with the namespace.\\
+We declared the namespace associated the prefix \lstinline|mock| with the namespace.
 
 \subsubsection{Define \textbackslash newline}
- The next task is to teach \LaTeX ML new commands used in \texttt{mockDoc.tex}. Here is an example:
+ The next task is to teach \latexml new commands used in \lstinline|mockDoc.tex|. Here is an example:
 \begin{lstlisting}
 DefConstructor('\newline',"<mock:break/>");
 \end{lstlisting}
 
- This line defines how \LaTeX ML interprets \texttt{\textbackslash newline}, as you see, \LaTeX ML will translate \texttt{\textbackslash newline} to \texttt{<mock:break/>} in \texttt{mockDoc.xml}.\\
+ This line defines how \latexml interprets \lstinline|\textbackslash newline|, as you see, \latexml will translate \lstinline|\textbackslash newline| to \lstinline|<mock:break/>| in \lstinline|mockDoc.xml|.
 
 \subsubsection{Define \textbackslash section}
- When dealing with \texttt{section}, things get a little tricky, with:
+ When dealing with \lstinline|section|, things get a little tricky, with:
 \begin{lstlisting}
 DefConstructor('\section{}', "<mock:section><mock:title>#1</mock:title>");
 \end{lstlisting}
-we defined \texttt{\textbackslash section}. But, think about the closing tags. In \texttt{mockDoc.tex}, we declared where the \texttt{\textbackslash section} starts and where the next \texttt{\textbackslash section} starts, nevertheless, we never wrote something like ``Now close this section". Here is why we need \texttt{mockDoc.rnc}. This schema file tells \LaTeX ML what the structure of our document, and with:
+we defined \lstinline|\textbackslash section|. But, think about the closing tags. In \lstinline|mockDoc.tex|, we declared where the \lstinline|\textbackslash section| starts and where the next \lstinline|\textbackslash section| starts, nevertheless, we never wrote something like ``Now close this section". Here is why we need \lstinline|mockDoc.rnc|. This schema file tells \latexml what the structure of our document, and with:
 \begin{lstlisting}
 Tag('mock:section', autoClose=>1);
 \end{lstlisting}
-\LaTeX ML will close the section tags (i.e, adding \texttt{</mock:section>}) whenever needed. \\
+\latexml will close the section tags (i.e, adding \lstinline|</mock:section>|) whenever needed.
 
 \subsubsection{Define document}
 You may think something like:
 \begin{lstlisting}
 DefEnvironment('{document}', "<mock:document>#body</mock:document>");
 \end{lstlisting}
-is enough for defining \texttt{document} environment. You can try it, you will find that all spaces disappear. What we actually wrote in \texttt{doc.cls.ltxml} is:
+is enough for defining \lstinline|document| environment. You can try it, you will find that all spaces disappear. What we actually wrote in \lstinline|doc.cls.ltxml| is:
 \begin{lstlisting}
 DefEnvironment('{document}', "<mock:document>#body</mock:document>", beforeDigest => sub { AssignValue(inPreamble => 0); });
 \end{lstlisting}
-This code can prevent the error mentioned before, however, the mechanism of the \texttt{beforeDigest} part is out of our dicussion in this tutorial.\\
+This code can prevent the error mentioned before, however, the mechanism of the \lstinline|beforeDigest| part is out of our discussion in this tutorial.
 
- For an environment, we don't need care about autoclosing, since an environment is always like
+ For an environment, we don't need care about auto-closing, since an environment is always like
 \begin{lstlisting}
 \begin{*environment-name*}
 content...
 \end{*environment-name*}
 \end{lstlisting}
-where \texttt{\textbackslash end\{*environment-name*\}} will indicate where to close the tags.\\
+where \lstinline|\textbackslash end\{*environment-name*\}| will indicate where to close the tags.
 
-\subsubsection{Autoopen for p}
-Since we also want to write some texts directly under \texttt{document}, without any \texttt{section}. At this circumstance, we need autoopen for \texttt{p}:
+\subsubsection{Auto-open for p}
+Since we also want to write some texts directly under \lstinline|document|, without any \lstinline|section|. At this circumstance, we need auto-open for \lstinline|p|:
 \begin{lstlisting}
 Tag('mock:p', autoOpen=>1);
 \end{lstlisting}
-which will surround such texts.\\
+which will surround such texts.
 
 \section{Conclusion}
-Thank you for following this tutorial to the end. After processing the \texttt{makefile}
-(see ~\cite{app:mk}), with command:
+Thank you for following this tutorial to the end. After processing the \lstinline|makefile|
+(see ~\ref{app:mk}), with command:
 \begin{lstlisting}[language=bash]
 make
 \end{lstlisting}
-you should be able to see the generated \texttt{mockDoc.xml} in your current directory. It
-should be something similar to your expected \texttt{mockDoc\_sample.xml}. 
+you should be able to see the generated \lstinline|mockDoc.xml| in your current directory. It
+should be something similar to your expected \lstinline|mockDoc\_sample.xml|. 
 
-\bibliographystyle{alpha}
-\bibliography{howTo}
+\printbibliography
+\newpage
 
 \begin{appendix}
 \section{mockDoc Example}\label{app:ex}
@@ -197,7 +225,7 @@ should be something similar to your expected \texttt{mockDoc\_sample.xml}.
 \section{mockDoc RelaxNG schema}\label{app:rnc}
 \lstinputlisting[language=RNC]{mockDoc.rnc}
 
-\section{Generate XML}\label{app:rnc}
+\section{Generate XML}\label{app:xml}
 \lstinputlisting[language=mock]{mockDoc.xml}
 
 \section{A Makefile for Automation}\label{app:mk}
@@ -210,4 +238,7 @@ should be something similar to your expected \texttt{mockDoc\_sample.xml}.
 %%% TeX-master: t
 %%% End:
 
-%  LocalWords:  maketitle noindent
+%  LocalWords:  maketitle noindent latexml textbf lstlisting latexmlc libxslt ednote nxml
+%  LocalWords:  doc.cls mockDoc.rnc trang.jar trang.jar mockDoc.rng mockDoc.rng textit mk
+%  LocalWords:  nxml Bysshe textbackslash textbackslash textbackslash textbackslash cls
+%  LocalWords:  subsubsection printbibliography newpage lstinputlisting ltxml rnc
