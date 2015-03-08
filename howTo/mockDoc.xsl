@@ -11,29 +11,53 @@ xmlns:mock = "https://kwarc.info/projects/mockDoc"
 <xsl:template match="/">
 	<html>
 	<body>
-		<xsl:for-each select="mock:document/mock:section">
-			<h1>
-			<xsl:value-of select="mock:title" />
-			</h1>
-			<p>
-			<xsl:value-of select="mock:p" />
-			</p>
-			<xsl:for-each select="mock:subsection">
-				<h2>
-				<xsl:value-of select="mock:title" />
-				</h2>
-				<xsl:for-each select="mock:paragraph">
-					<h3>
-					<xsl:value-of select="mock:title" />
-					</h3>
-					<p>
-					<xsl:value-of select="mock:p" />
-					</p>
-				</xsl:for-each>
-			</xsl:for-each>
-		</xsl:for-each>
+		<head>
+			<title>MockDoc HTML SAMPLE Output</title>
+		</head>
+		<xsl:apply-templates/>
 	</body>
 	</html>
 </xsl:template>	
+
+<xsl:template match="mock:section">
+	<section>
+	<span style="font-size:200%">
+		<xsl:apply-templates select="mock:title"/>
+	</span>
+	<xsl:apply-templates select="mock:p"/>
+	<xsl:apply-templates select="mock:subsection"/>
+	</section>
+</xsl:template>
+
+<xsl:template match="mock:subsection">
+	<subsection>
+	<span style="font-size:150%">
+		<xsl:apply-templates select="mock:title"/>
+	</span>
+	<xsl:apply-templates select="mock:paragraph"/>
+	</subsection>
+</xsl:template>
+
+<xsl:template match="mock:paragraph">
+	<paragraph>
+	<span style="font-size:120%">
+	<xsl:apply-templates select="mock:title"/>
+	</span>
+	<xsl:apply-templates select="mock:p"/>
+	</paragraph>
+</xsl:template>
+
+<xsl:template match="mock:p">
+	<p>
+	<xsl:value-of select="."/>
+	</p>
+</xsl:template>
+
+<xsl:template match="mock:title">
+	Title:
+	<xsl:value-of select="."/>
+	<br />
+</xsl:template>
+
 
 </xsl:stylesheet>
