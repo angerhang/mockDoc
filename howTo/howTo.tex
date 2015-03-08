@@ -35,7 +35,12 @@
 \lstdefinelanguage{mock}[]{XML}%
   {morekeywords={mock:document,mock:section,mock:subsection,mock:paragraph,mock:title,mock:p},
    sensitive=true}
-%$
+
+
+\lstdefinelanguage{XSL}%
+  {morekeywords={xmlns:mock,mock:document,mock:section,mock:subsection,mock:paragraph,mock:title,mock:p},
+   showstringspaces=false,
+   sensitive=true}%$
 
 \def\latexml{{\LaTeX}ML\xspace}
 
@@ -81,6 +86,7 @@ This how-to tutorial is structured as follows: Section~\ref{sec:using} briefly r
 \latexml workflows and the files involved.\ednote{MK: continue, when the struture is
   fixed} Section~\ref{sec:concl} concludes the tutorial.
 
+
 \section{Using LaTeXML}\label{sec:using}
 
 In this tutorial we we assume a working installation of \latexml -- see~\cite{LaTeXML:get}
@@ -90,13 +96,16 @@ for instructions -- on a Unix-like system (Linux, Mac OS, etc.).
 command
 \begin{lstlisting}[language=bash]
 latexmlc mockDoc.tex --format=XML --destination=mockDoc.xml --log=mockDoc.xml.log
+latexmlpost --stylesheet=mockDoc.xsl -dest=mockDoc.html mockDoc.xml 
 \end{lstlisting}
-for converting \lstinline|mockDoc.tex| into \lstinline|mockDoc.xml|.\ednote{Actually, we
+for converting \lstinline|mockDoc.tex| into \lstinline|mockDoc.xml| and \lstinline|mockDoc.xml| into
+\lstinline|mockDoc.html| \ednote{Actually, we
   should also have a HTML step, so that this shows the stylesheet as well.}
 
 The conversion from {\LaTeX} to XML is processed by \latexml. Basically \latexml maps the
 {\LaTeX} markups to the XML markups, more specifically: macros, primitives and
-constructors.
+constructors. The post-processing mechanism such as conversion to HTML and XHTML is done by 
+passing the the documents through the post-processing filter modules.
 
 \subsection{Things We Need}
 \begin{description}
@@ -278,6 +287,35 @@ Tag('mock:p', autoOpen=>1);
 \end{lstlisting}
 which will surround such texts.
 
+\section{Postprocessing for Web Workflow}
+After we obtain \lstinline|mockDoc.xml|, we can further utilize the power of \latexml to convert it into some other
+useful formats such as HTML, HTML5 and XHTML. \latexml by default provides us with stylesheets for this conversion, however we are given freedom to customize this process by creating our own XSL and CSS stylesheets.
+
+\subsection{XSL Stylesheet}
+Similar to how we create RelaxNG schema, in \lstinline|mockDoc.xsl|
+\begin{lstlisting}
+<xsl:template match="/">
+	<xsl:apply-templates/>
+</xsl:template>	
+\end{lstlisting}
+we associate the template with the root of XML and then within the main structure, we tells \latexml to use other
+template when needed.
+\begin{lstlisting}
+<xsl:template match="mock:section">
+	<section>
+	<span style="font-size:200%">
+		<xsl:apply-templates select="mock:title"/>
+	</span>
+	<xsl:apply-templates select="mock:p"/>
+	<xsl:apply-templates select="mock:subsection"/>
+	</section>
+</xsl:template>
+\end{lstlisting}
+In case of the section template, we let \latexml generate a section in HTML and then apply the templates for the macros that appear in \lstinline|mock:section| from our \lstinline|mockDoc.xml| file. Our \lstinline|mockDoc.xsl| should be consistent with our \lstinline|mockDoc.rnc| as they both define the structure of our documents, as you can see from the section definition in our \lstinline|mockDoc.rnc|, they both contain: title, p and subsection elements.
+\begin{lstlisting}
+section = element section {title,(p |subsection)*}
+\end{lstlisting}
+
 \section{Conclusion}\label{sec:concl}
 \ednote{MK: say something here}
 \begin{newpart}{MK: do not forget to discuss this somewhere}
@@ -306,6 +344,12 @@ which will surround such texts.
 
 \subsection{Generated XML}\label{app:xml}
 \lstinputlisting[language=mock]{mockDoc.xml}
+
+\subsection{XSL stylesheet}\label{app:xsl}
+\lstinputlisting[language=xsl]{mockDoc.xsl}
+
+\subsection{Generated HTML}\label{app:html}
+\lstinputlisting[language=html]{mockDoc.html}
 
 \section{A Makefile for Automation}\label{app:mk}
 \lstinputlisting[language=bash]{Makefile}
