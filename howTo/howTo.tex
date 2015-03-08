@@ -81,7 +81,6 @@ This how-to tutorial is structured as follows: Section~\ref{sec:using} briefly r
 \latexml workflows and the files involved.\ednote{MK: continue, when the struture is
   fixed} Section~\ref{sec:concl} concludes the tutorial.
 
-
 \section{Using LaTeXML}\label{sec:using}
 
 In this tutorial we we assume a working installation of \latexml -- see~\cite{LaTeXML:get}
@@ -94,18 +93,6 @@ latexmlc mockDoc.tex --format=XML --destination=mockDoc.xml --log=mockDoc.xml.lo
 \end{lstlisting}
 for converting \lstinline|mockDoc.tex| into \lstinline|mockDoc.xml|.\ednote{Actually, we
   should also have a HTML step, so that this shows the stylesheet as well.}
-
-\begin{oldpart}{MK: I do not think that this has any role here; what are you trying to
-    achieve with this?}
-\textbf{Note}: Regarding \latexml installation, when you think you have finished installing \latexml, run a simple command:
-\begin{lstlisting}
-latexml your_sample.tex
-\end{lstlisting}
- to test it. You should be able to see an XML interpretation of
- \lstinline|your\_sample.tex| in screen immediately. Under some circumstances \latexml
- doesn't seem to work, maybe you fail to install the prerequisites such as
- \lstinline|libxml2| or \lstinline|libxslt|.
-\end{oldpart}
 
 The conversion from {\LaTeX} to XML is processed by \latexml. Basically \latexml maps the
 {\LaTeX} markups to the XML markups, more specifically: macros, primitives and
