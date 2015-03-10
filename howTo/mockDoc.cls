@@ -3,7 +3,7 @@
 % Date: 3 Feb, 2015
 
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesClass{doc}
+\ProvidesClass{mockDoc}
 \RequirePackage{ifthen}
 
 \renewcommand\normalsize{\fontsize{10pt}{12pt}\selectfont}

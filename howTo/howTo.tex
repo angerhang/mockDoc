@@ -100,7 +100,8 @@ latexmlpost --stylesheet=mockDoc.xsl -dest=mockDoc.html mockDoc.xml
 \end{lstlisting}
 for converting \lstinline|mockDoc.tex| into \lstinline|mockDoc.xml| and \lstinline|mockDoc.xml| into
 \lstinline|mockDoc.html| \ednote{Actually, we
-  should also have a HTML step, so that this shows the stylesheet as well.}
+  should also have a HTML step, so that this shows the stylesheet as well. *Already added a post processing
+  chapter in the end.}
 
 The conversion from {\LaTeX} to XML is processed by \latexml. Basically \latexml maps the
 {\LaTeX} markups to the XML markups, more specifically: macros, primitives and
@@ -111,11 +112,11 @@ passing the the documents through the post-processing filter modules.
 \begin{description}
 \item[source] Here we use \lstinline|mockDoc.tex| as a minimal example\ednote{MK: make a
     minimal one, use that here } see appendix \ref{app:ex}\ednote{make other references}
-\item[({\LaTeX} class)] we provide a {\LaTeX} class \lstinline|doc.cls| for reference;
+\item[({\LaTeX} class)] we provide a {\LaTeX} class \lstinline|mockDoc.cls| for reference;
   sometimes it is useful to generate PDF for proofreading. Also, the normal situation in
   developing \latexml bindings is that the class/package pre-exists. This file won't be
   illustrated in this tutorial. 
-\item[\latexml binding] the core issue of this tutorial. We use \lstinline|doc.cls.ltxml|
+\item[\latexml binding] the core issue of this tutorial. We use \lstinline|mockDoc.cls.ltxml|
   -- Section~\ref{sec:lxtml} for a step-by-step explanation and appendix~\ref{app:ltxml}
   for the end result.
 \item[RelaxNG schema] \latexml needs a RelaxNG schema to infer the output structure. We
@@ -128,8 +129,8 @@ passing the the documents through the post-processing filter modules.
 After you have finished writing all the documents above, run the command mentioned before,
 and then you should be able to see the converted XML file for \lstinline|mockDoc.tex|. In
 the following chapters we will explain how to construct \lstinline|mockDoc.rnc| and
-\lstinline|doc.cls.ltxml|\ednote{MK: I think we should rename doc.cls and doc.cls.ltxml to
-  mockDoc.cls, ... }.
+\lstinline|mockDoc.cls.ltxml|
+
 
 These workflows can be automated via a Unix \lstinline|makefile| (see
 appendix~\ref{app:mk}), which re-generates everything when source files have changed. Then
@@ -137,11 +138,6 @@ only need to issue the command:
 \begin{lstlisting}[language=bash]
 make
 \end{lstlisting}
-\begin{oldpart}{put somewhere else}
-  you should be able to see the generated \lstinline|mockDoc.xml| in your current
-  directory. It should be something similar to your expected
-  \lstinline|mockDoc\_sample.xml|.
-\end{oldpart}
 
 \section{The mockDoc Format}\label{sec:mockdoc}
 
@@ -170,9 +166,9 @@ only giving the start cues (here the numbered section headings) -- whereas the X
 start and end tags\ednote{MK: are there more? Here would be the place to discuss them.}
 
 \begin{oldpart}{MK: I do not understand this, what do you want to say here?}
-  After you link \lstinline|mockDoc.tex| and \lstinline|doc.cls.ltxml| by changing your
+  After you link \lstinline|mockDoc.tex| and \lstinline|mockDoc.cls.ltxml| by changing your
   document class in your \lstinline|mockDoc.tex| into your \latexml binding name, in our
-  case,``doc''. Put \lstinline|doc.cls.ltxml| and \lstinline|mockDoc.tex| in the same
+  case,``doc''. Put \lstinline|mockDoc.cls.ltxml| and \lstinline|mockDoc.tex| in the same
   folder, \latexml will load your binding file automatically, when it tries to do the
   conversion.
 \end{oldpart}
@@ -216,14 +212,14 @@ relation.
 
 \subsection{Basic structure}
 Since {\LaTeX} binding is a perl module, we need to initialize a binding file by adding
-the followings in the beginning of \lstinline|doc.cls.ltxml|:
+the followings in the beginning of \lstinline|mockDoc.cls.ltxml|:
 \begin{lstlisting}[language=Perl]
 package LaTeXML::Package::Pool;
 use strict;
 use LaTeXML::Package;
 use warnings;
 \end{lstlisting}
-At the end of \lstinline|doc.cls.ltxml|, don't forget to include
+At the end of \lstinline|mockDoc.cls.ltxml|, don't forget to include
 \begin{lstlisting}
 1;
 \end{lstlisting}
@@ -266,7 +262,7 @@ You may think something like:
 \begin{lstlisting}
 DefEnvironment('{document}', "<mock:document>#body</mock:document>");
 \end{lstlisting}
-is enough for defining \lstinline|document| environment. You can try it, you will find that all spaces disappear. What we actually wrote in \lstinline|doc.cls.ltxml| is:
+is enough for defining \lstinline|document| environment. You can try it, you will find that all spaces disappear. What we actually wrote in \lstinline|mockDoc.cls.ltxml| is:
 \begin{lstlisting}
 DefEnvironment('{document}', "<mock:document>#body</mock:document>", beforeDigest => sub { AssignValue(inPreamble => 0); });
 \end{lstlisting}
@@ -286,6 +282,9 @@ Since we also want to write some texts directly under \lstinline|document|, with
 Tag('mock:p', autoOpen=>1);
 \end{lstlisting}
 which will surround such texts.
+
+You now have a complete set of tiles to generate your XML file. Simply by using makefile, you should be able to see the generated \lstinline|mockDoc.xml| in your current directory. It should be something similar to your expected
+\lstinline|mockDoc\_sample.xml|.
 
 \section{Postprocessing for Web Workflow}
 After we obtain \lstinline|mockDoc.xml|, we can further utilize the power of \latexml to convert it into some other
@@ -334,10 +333,10 @@ section = element section {title,(p |subsection)*}
 \begin{appendix}
 \section{Appendix}
 \subsection{The mockDoc Class}\label{app:cls}
-\lstinputlisting[language={[LaTeX]TeX}]{doc.cls}
+\lstinputlisting[language={[LaTeX]TeX}]{mockDoc.cls}
 
 \subsection{The mockDoc Class Binding}\label{app:ltxml}
-\lstinputlisting[language=Perl]{doc.cls.ltxml}
+\lstinputlisting[language=Perl]{mockDoc.cls.ltxml}
 
 \subsection{mockDoc RelaxNG schema}\label{app:rnc}
 \lstinputlisting[language=RNC]{mockDoc.rnc}
@@ -362,7 +361,7 @@ section = element section {title,(p |subsection)*}
 %%% End:
 
 %  LocalWords:  maketitle noindent latexml textbf lstlisting latexmlc libxslt ednote nxml
-%  LocalWords:  doc.cls mockDoc.rnc trang.jar trang.jar mockDoc.rng mockDoc.rng textit mk
+%  LocalWords:  mockDoc.cls mockDoc.rnc trang.jar trang.jar mockDoc.rng mockDoc.rng textit mk
 %  LocalWords:  nxml Bysshe cls
 %  LocalWords:  subsection printbibliography newpage lstinputlisting ltxml rnc oldpart
 %  LocalWords:  lxtml mockdoc concl
