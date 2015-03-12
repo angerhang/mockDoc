@@ -1,13 +1,11 @@
 \documentclass[a4paper]{article}
 \usepackage[backend=bibtex,style=alphabetic]{biblatex}
 \addbibresource{howto.bib}
-
 \usepackage{a4wide}
 
 \usepackage{hyperref} 
 \usepackage{listings}
 \usepackage{xcolor}
-\usepackage{hyperref}
 \usepackage{url}
 \usepackage{xspace}
 \usepackage[show]{ed}
@@ -99,9 +97,8 @@ latexmlc mockDoc.tex --format=XML --destination=mockDoc.xml --log=mockDoc.xml.lo
 latexmlpost --stylesheet=mockDoc.xsl -dest=mockDoc.html mockDoc.xml 
 \end{lstlisting}
 for converting \lstinline|mockDoc.tex| into \lstinline|mockDoc.xml| and \lstinline|mockDoc.xml| into
-\lstinline|mockDoc.html| \ednote{Actually, we
-  should also have a HTML step, so that this shows the stylesheet as well. *Already added a post processing
-  chapter in the end.}
+\lstinline|mockDoc.html|
+
 
 The conversion from {\LaTeX} to XML is processed by \latexml. Basically \latexml maps the
 {\LaTeX} markups to the XML markups, more specifically: macros, primitives and
@@ -111,9 +108,7 @@ passing the the documents through the post-processing filter modules.
 \subsection{Things We Need}
 \begin{description}
 \item[source] Here we use \lstinline|mockDoc.tex| as a minimal example\ednote{MK: make a
-    minimal one, use that here } see appendix \ref{app:ex}\ednote{make other references}
-\item[({\LaTeX} class)] we provide a {\LaTeX} class \lstinline|mockDoc.cls| for reference;
-  sometimes it is useful to generate PDF for proofreading. Also, the normal situation in
+    minimal one, use that here. Hang:are we saying we are not using mockDoc.tex as our minimal example throughout the howTo, or we are just creating a small code snippet to show the tex file? } see appendix \ref{app:ex}\ednote{make other references} \item[({\LaTeX} class)] we provide a {\LaTeX} class \lstinline|mockDoc.cls| for reference; sometimes it is useful to generate PDF for proofreading. The  normal situation in
   developing \latexml bindings is that the class/package pre-exists. This file won't be
   illustrated in this tutorial. 
 \item[\latexml binding] the core issue of this tutorial. We use \lstinline|mockDoc.cls.ltxml|
@@ -126,8 +121,8 @@ passing the the documents through the post-processing filter modules.
   \lstinline|mockDoc.rng| is that, \lstinline|mockDoc.rnc| is much shorter and easier to
   maintain. 
 \end{description}
-After you have finished writing all the documents above, run the command mentioned before,
-and then you should be able to see the converted XML file for \lstinline|mockDoc.tex|. In
+After we have finished writing all the documents above, run the command mentioned before,
+and then we should be able to see the converted XML file for \lstinline|mockDoc.tex|. In
 the following chapters we will explain how to construct \lstinline|mockDoc.rnc| and
 \lstinline|mockDoc.cls.ltxml|
 
@@ -158,49 +153,38 @@ elements \lstinline|document|, \lstinline|\section|, \lstinline|\subsection|,
 
 \lstinputlisting[language={[LaTeX]TeX},caption=A Minimal {\LaTeX}
 Document,label=minimal.xml]{mockDoc.xml} \ednote{MK: actually, we should make an idealized
-  minimal XML example by remove all the XML-isms from the generated one and show it here.}
+  minimal XML example by remove all the XML-isms from the generated one and show it here. 
+  Hang: I am confused about the notation of a minimal xml example, just like the the minimal tex file mentioned i  n note 3}
 
-Note the typical format-specific differences between the presentation-oriented {\LaTeX}
-and more content-oriented XML formats. The sectioning is conveyed by macros in {\LaTeX} --
+Note the typical format-specific differences between the content-oriented {\LaTeX}
+and more data-oriented XML formats. The sectioning is conveyed by macros in {\LaTeX} --
 only giving the start cues (here the numbered section headings) -- whereas the XML has
-start and end tags\ednote{MK: are there more? Here would be the place to discuss them.}
-
-\begin{oldpart}{MK: I do not understand this, what do you want to say here?}
-  After you link \lstinline|mockDoc.tex| and \lstinline|mockDoc.cls.ltxml| by changing your
-  document class in your \lstinline|mockDoc.tex| into your \latexml binding name, in our
-  case,``doc''. Put \lstinline|mockDoc.cls.ltxml| and \lstinline|mockDoc.tex| in the same
-  folder, \latexml will load your binding file automatically, when it tries to do the
-  conversion.
-\end{oldpart}
-
+start and end tags. In addition, {\LaTeX} markup is less strict then XML markup, meaning {\LaTeX} more
+suitable for somewhat messy human readable documents, whilst in XML not everything is allowed.   \
 
 \subsection{The RelaxNG Schema}\label{sec:rnc}
 Schema is a crucial document that decides how \lstinline|mockDoc.xml| is constructed. When
-you are creating your own schema\footnote{Before you write your expected xml and schema,
-  having a look at the links below can be beneficial:
-  \url{http://relaxng.org/compact-tutorial-20030326.html};
-  \url{http://www.w3schools.com/xml/}. }, one good approach to test this is to create your
-expected \lstinline|mockDoc\_sample.xml| by hand, according to your
+one is creating his now schema, the ~\cite{RelaxNG:tutorial} and ~\cite{XML:tutorial} are two
+good documentations to get started. One good approach to test this is to create our
+expected \lstinline|mockDoc\_sample.xml| by hand, according to our
 \lstinline|mockDoc.tex|, then compare \lstinline|mockDoc\_sample.xml| with the generated
-\lstinline|mockDoc.xml|. You can easily accomplish this by using \textit{emacs nxml
-  mode}\footnote{Here is a tutorial about Emacs nxml mode:
-  \url{http://www.emacswiki.org/emacs/NxmlMode}}, in which you have the freedom to write
-your expected \lstinline|mockDoc.xml|, while validating your \lstinline|mockDoc.xml| at
-the same time. If validation fails, you can see the error message instantly, such that you
-can debug your \lstinline|mockDoc.xml| or schema accordingly.\ednote{MK: convert all
-  footnotes to citations!}
+\lstinline|mockDoc.xml|. we can easily accomplish this by using \textit{emacs nxml
+  mode} ~\cite{Emacs:nxml}, in which we have the freedom to write
+our expected \lstinline|mockDoc.xml|, while validating our \lstinline|mockDoc.xml| at
+the same time. If validation fails, we can see the error message instantly, such that we
+can debug our \lstinline|mockDoc.xml| or schema accordingly.
 
- In our \lstinline|mockDoc.rnc|:
+In our \lstinline|mockDoc.rnc|:
 \begin{lstlisting}
 document = element document {p, section*}
 section = element section {title,(p |subsection)*}
 \end{lstlisting}
-you can easily see that, under a \lstinline|document|, there can be either \lstinline|p| or \lstinline|section|, and under a \lstinline|section| there can be a \lstinline|title| followed by \lstinline|p| or a \lstinline|title| followed by a \lstinline|subsection|. This is because in the first section in \lstinline|mockDoc.tex|:
+We can easily see that, under a \lstinline|document|, there can be either \lstinline|p| or \lstinline|section|, and under a \lstinline|section| there can be a \lstinline|title| followed by \lstinline|p| or a \lstinline|title| followed by a \lstinline|subsection|. This is because in the first section in \lstinline|mockDoc.tex|:
 \begin{lstlisting}[language=TeX]
 \section{A brief introduction about Shelley}
     Percy Bysshe Shelley (4 August 1792 -- 8 July 1822)...
 \end{lstlisting}
-there is no \lstinline|subsection| but texts directly. But in the other \lstinline|section|s, there are \lstinline|subsection|s. In your schema you need to consider all kinds of possible hierarchy of your elements.
+there is no \lstinline|subsection| but texts directly. But in the other \lstinline|section|s, there are \lstinline|subsection|s. In our schema we need to consider all kinds of possible hierarchy of our elements.
 
 
 
@@ -232,8 +216,9 @@ RegisterNamespace('mock'=>"https://kwarc.info/projects/mockDoc");
 RelaxNGSchema("mockDoc.rng",'mock'=>"https://kwarc.info/projects/mockDoc");
 \end{lstlisting}
  We declared the namespace associated the prefix \lstinline|mock| with the
- namespace.\ednote{MK: we have to explain the why more, not just what to do; that is
-   generally the case.}
+ namespace, and thus we can use the prefix when defining new macros to avoid 
+ name conflicts. The second lines tells \latexml that the generated xml should fit in our
+ schema.
 
 \subsection{Linebreaks}
 The next task is to teach \latexml new commands used in \lstinline|mockDoc.tex|. Here is
@@ -242,7 +227,7 @@ an example:
 DefConstructor('\newline',"<mock:break/>");
 \end{lstlisting}
 
-This line defines how \latexml interprets \lstinline|\newline|, as you see,
+This line defines how \latexml interprets \lstinline|\newline|, as we see,
 \latexml will translate \lstinline|\newline| to \lstinline|<mock:break/>| in
 \lstinline|mockDoc.xml|.
 
@@ -258,11 +243,11 @@ Tag('mock:section', autoClose=>1);
 \latexml will close the section tags (i.e, adding \lstinline|</mock:section>|) whenever needed.
 
 \subsection{The Document Environment}
-You may think something like:
+We may think something like:
 \begin{lstlisting}
 DefEnvironment('{document}', "<mock:document>#body</mock:document>");
 \end{lstlisting}
-is enough for defining \lstinline|document| environment. You can try it, you will find that all spaces disappear. What we actually wrote in \lstinline|mockDoc.cls.ltxml| is:
+is enough for defining \lstinline|document| environment. We can try it, but we will find that all spaces disappear. What we actually wrote in \lstinline|mockDoc.cls.ltxml| is:
 \begin{lstlisting}
 DefEnvironment('{document}', "<mock:document>#body</mock:document>", beforeDigest => sub { AssignValue(inPreamble => 0); });
 \end{lstlisting}
@@ -283,7 +268,8 @@ Tag('mock:p', autoOpen=>1);
 \end{lstlisting}
 which will surround such texts.
 
-You now have a complete set of tiles to generate your XML file. Simply by using makefile, you should be able to see the generated \lstinline|mockDoc.xml| in your current directory. It should be something similar to your expected
+
+We now have a complete set of tiles to generate our XML file. Simply by using makefile, we should be able to see the generated \lstinline|mockDoc.xml| in our current directory. It should be something similar to we expected
 \lstinline|mockDoc\_sample.xml|.
 
 \section{Postprocessing for Web Workflow}
@@ -294,38 +280,53 @@ useful formats such as HTML, HTML5 and XHTML. \latexml by default provides us wi
 Similar to how we create RelaxNG schema, in \lstinline|mockDoc.xsl|
 \begin{lstlisting}
 <xsl:template match="/">
-	<xsl:apply-templates/>
-</xsl:template>	
+  <html>
+    <head>
+      <xsl:comment>automatically generated, handle with care</xsl:comment>
+    </head>
+    <xsl:apply-templates/>
+  </html>
+</xsl:template>
 \end{lstlisting}
 we associate the template with the root of XML and then within the main structure, we tells \latexml to use other
 template when needed.
 \begin{lstlisting}
 <xsl:template match="mock:section">
-	<section>
-	<span style="font-size:200%">
-		<xsl:apply-templates select="mock:title"/>
-	</span>
-	<xsl:apply-templates select="mock:p"/>
-	<xsl:apply-templates select="mock:subsection"/>
-	</section>
+  <h1>
+    <xsl:value-of select="mock:title" />
+  </h1>
+  <p>
+    <xsl:value-of select="mock:p" />
+  </p>
+  <xsl:for-each select="mock:subsection">
+    <h2>
+      <xsl:value-of select="mock:title" />
+    </h2>
+    <xsl:for-each select="mock:paragraph">
+      <h3>
+	<xsl:value-of select="mock:title" />
+      </h3>
+      <p>
+	<xsl:value-of select="mock:p" />
+      </p>
+    </xsl:for-each>
+  </xsl:for-each>
+</xsl:stylesheet>
 </xsl:template>
 \end{lstlisting}
-In case of the section template, we let \latexml generate a section in HTML and then apply the templates for the macros that appear in \lstinline|mock:section| from our \lstinline|mockDoc.xml| file. Our \lstinline|mockDoc.xsl| should be consistent with our \lstinline|mockDoc.rnc| as they both define the structure of our documents, as you can see from the section definition in our \lstinline|mockDoc.rnc|, they both contain: title, p and subsection elements.
+In case of the section template, we let \latexml generate a section in HTML and then apply the templates for the macros that appear in \lstinline|mock:section| from our \lstinline|mockDoc.xml| file. Our \lstinline|mockDoc.xsl| should be consistent with our \lstinline|mockDoc.rnc| as they both define the structure of our documents, as we can see from the section definition in our \lstinline|mockDoc.rnc|, they both contain: title, p and subsection elements.
 \begin{lstlisting}
 section = element section {title,(p |subsection)*}
 \end{lstlisting}
 
 \section{Conclusion}\label{sec:concl}
-\ednote{MK: say something here}
-\begin{newpart}{MK: do not forget to discuss this somewhere}
-  For a web workflow, where the ultimate goal is to generate HTML5, writing a document
-  class from scratch may not be the most common workflow, since the majority of document
-  classes in {\LaTeX} are derived in some way from \lstinline|article.cls| and therefore
+The trick of using \latexml is to get familiar with all the necessary components that are required for different processing, for instance if we want to customize the conversion from XML to HTML, it is much helpful to know 
+  \latexml schema and XSLT and XHTML. \latexml allows a large degree of customizations which maximize the connivence of format conversion, particularly the conversion from \lstinline|tex| to \lstinline|xml|, as our prefer to use  \TeX for production and XML for delivery. For a web workflow, where the ultimate goal is to generate HTML5, writing a document class from scratch may not be the most common workflow, since the majority of document classes in {\LaTeX} are derived in some way from \lstinline|article.cls| and therefore
   the \latexml bindings can inherit the from \lstinline|article.cls.ltmxl|, but in some
   cases we want to use \latexml to generate other XML-based format. There we need the
   techniques in this tutorial. Examples are generating OMDoc from s\TeX\ednote{MK: cite
-    them from kwarc.bib, are there others?}
-\end{newpart}
+    them from kwarc.bib, are there others? Hang: .bib doesn't show after use printbibliography}
+
 
 \printbibliography
 \newpage
@@ -352,6 +353,9 @@ section = element section {title,(p |subsection)*}
 
 \section{A Makefile for Automation}\label{app:mk}
 \lstinputlisting[language=bash]{Makefile}
+
+\printbibliography
+
 \end{appendix}
 \end{document}
 
