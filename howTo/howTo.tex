@@ -80,9 +80,9 @@ how-to and will go through it step-by-step. All necessary files (and the develop
 version of this tutorial )are available from~\cite{mockDoc:git}, but are also included in
 the appendix of this document for reference.
 
-This how-to tutorial is structured as follows: Section~\ref{sec:using} briefly reviews
-\latexml workflows and the files involved.\ednote{MK: continue, when the struture is
-  fixed} Section~\ref{sec:concl} concludes the tutorial.
+This how-to tutorial is structured as follows: section~\ref{sec:using} briefly reviews
+\latexml workflows and the files involved; section~\ref{sec:mockdoc} introduces a minimal \TeX and its 
+schema; section~\ref{sec:bind} gives a basic view of how to write \latexml binding; section~\ref{sec:posp} talks about postprocessing for web workflow; section~\ref{sec:concl} concludes the tutorial.
 
 
 \section{Using LaTeXML}\label{sec:using}
@@ -93,8 +93,8 @@ for instructions -- on a Unix-like system (Linux, Mac OS, etc.).
  Given that, we use the
 command
 \begin{lstlisting}[language=bash]
-latexmlc mockDoc.tex --format=XML --destination=mockDoc.xml --log=mockDoc.xml.log
-latexmlpost --stylesheet=mockDoc.xsl -dest=mockDoc.html mockDoc.xml 
+latexmlc mockDoc.tex --format=XML --destination=mockDoc.xml --log=mockDoc.xml.log 
+latexmlpost --stylesheet=mockDoc.xsl --destination=mockDoc.html mockDoc.xml
 \end{lstlisting}
 for converting \lstinline|mockDoc.tex| into \lstinline|mockDoc.xml| and \lstinline|mockDoc.xml| into
 \lstinline|mockDoc.html|
@@ -107,20 +107,22 @@ passing the the documents through the post-processing filter modules.
 
 \subsection{Things We Need}
 \begin{description}
-\item[source] Here we use \lstinline|mockDoc.tex| as a minimal example\ednote{MK: make a
-    minimal one, use that here. Hang:are we saying we are not using mockDoc.tex as our minimal example throughout the howTo, or we are just creating a small code snippet to show the tex file? } see appendix \ref{app:ex}\ednote{make other references} \item[({\LaTeX} class)] we provide a {\LaTeX} class \lstinline|mockDoc.cls| for reference; sometimes it is useful to generate PDF for proofreading. The  normal situation in
+\item[Source] Here we use \lstinline|mockDoc.tex| as a minimal example see appendix \ref{app:tex} \item[{\LaTeX} class] we provide a {\LaTeX} class \lstinline|mockDoc.cls| for reference; sometimes it is useful to generate PDF for proofreading. The  normal situation in
   developing \latexml bindings is that the class/package pre-exists. This file won't be
   illustrated in this tutorial. 
 \item[\latexml binding] the core issue of this tutorial. We use \lstinline|mockDoc.cls.ltxml|
-  -- Section~\ref{sec:lxtml} for a step-by-step explanation and appendix~\ref{app:ltxml}
+  -- see section~\ref{sec:bind} for a step-by-step explanation and appendix~\ref{app:ltxml}
   for the end result.
 \item[RelaxNG schema] \latexml needs a RelaxNG schema to infer the output structure. We
-  supply it in compact form (\lstinline|mockDoc.rnc|; see appendix~\ref{app:rnc}, which
-  can be converted to the XML form \latexml needs (\lstinline|mockDoc.rng|) via
+  supply it in compact form \lstinline|mockDoc.rnc|; see appendix~\ref{app:rnc} for source and section ~\ref{sec:rnc} for explanation, which
+  can be converted to the XML form \latexml needs \lstinline|mockDoc.rng| via
   \lstinline|trang.jar|.  The reason for writing \lstinline|mockDoc.rnc| instead of
   \lstinline|mockDoc.rng| is that, \lstinline|mockDoc.rnc| is much shorter and easier to
   maintain. 
-\end{description}
+\item[XSL stylesheet] to customize our output in the web workflow, we can provide \latexml with 
+  \lstinline|mockDoc.xsl|, showing a general idea of how postprocessing works. See appendix~\ref{app:html}
+  for the effects and section ~\ref{sec:posp} for a detailed description.
+\end{description} 
 After we have finished writing all the documents above, run the command mentioned before,
 and then we should be able to see the converted XML file for \lstinline|mockDoc.tex|. In
 the following chapters we will explain how to construct \lstinline|mockDoc.rnc| and
@@ -137,7 +139,7 @@ make
 \section{The mockDoc Format}\label{sec:mockdoc}
 
 \subsection{A minimal Document Format}
-Actually our \lstinline|mockDoc|format is probably the smallest one in the world, it is
+Actually our \lstinline|mockDoc| format is probably the smallest one in the world, it is
 only intended for this tutorial. 
 
 The {\LaTeX} class only provides one environment: \lstinline|document| and four macros:
@@ -151,10 +153,7 @@ elements \lstinline|document|, \lstinline|\section|, \lstinline|\subsection|,
 \lstinline|\paragraph|, and \lstinline|\newline|. The XML document corresponding to the
 {\LaTeX} document from Listing~\ref{lst:minimal.tex} is
 
-\lstinputlisting[language={[LaTeX]TeX},caption=A Minimal {\LaTeX}
-Document,label=minimal.xml]{mockDoc.xml} \ednote{MK: actually, we should make an idealized
-  minimal XML example by remove all the XML-isms from the generated one and show it here. 
-  Hang: I am confused about the notation of a minimal xml example, just like the the minimal tex file mentioned i  n note 3}
+\lstinputlisting[language={XML},caption=The Generated XML Document,label=minimal.xml]{mockDoc.xml} 
 
 Note the typical format-specific differences between the content-oriented {\LaTeX}
 and more data-oriented XML formats. The sectioning is conveyed by macros in {\LaTeX} --
@@ -181,14 +180,14 @@ section = element section {title,(p |subsection)*}
 \end{lstlisting}
 We can easily see that, under a \lstinline|document|, there can be either \lstinline|p| or \lstinline|section|, and under a \lstinline|section| there can be a \lstinline|title| followed by \lstinline|p| or a \lstinline|title| followed by a \lstinline|subsection|. This is because in the first section in \lstinline|mockDoc.tex|:
 \begin{lstlisting}[language=TeX]
-\section{A brief introduction about Shelley}
-    Percy Bysshe Shelley (4 August 1792 -- 8 July 1822)...
+\section{First section}
+		Here is some text....
 \end{lstlisting}
-there is no \lstinline|subsection| but texts directly. But in the other \lstinline|section|s, there are \lstinline|subsection|s. In our schema we need to consider all kinds of possible hierarchy of our elements.
+there is no \lstinline|subsection| but texts, however in the other \lstinline|section|s, there are \lstinline|subsection|s. We need to consider all kinds of possible hierarchy of our elements in the schema.
 
 
 
-\section{How to Create a \latexml Binding}
+\section{How to Create a \latexml Binding}\label{sec:bind}
 We now come to the central part of our tutorial: writing the \latexml binding
 itself. Generally, a \latexml binding file is a Perl module -- and therefore underlies
 Perl syntax, but special high-level commands simplify expressing the {\LaTeX}-to-XML
@@ -271,53 +270,28 @@ which will surround such texts.
 
 We now have a complete set of tiles to generate our XML file. Simply by using makefile, we should be able to see the generated \lstinline|mockDoc.xml| in our current directory. It should be something similar to we expected
 \lstinline|mockDoc\_sample.xml|.
-
-\section{Postprocessing for Web Workflow}
+  
+\section{Postprocessing for Web Workflow}\label{sec:posp}
 After we obtain \lstinline|mockDoc.xml|, we can further utilize the power of \latexml to convert it into some other
 useful formats such as HTML, HTML5 and XHTML. \latexml by default provides us with stylesheets for this conversion, however we are given freedom to customize this process by creating our own XSL and CSS stylesheets.
 
 \subsection{XSL Stylesheet}
 Similar to how we create RelaxNG schema, in \lstinline|mockDoc.xsl|
 \begin{lstlisting}
-<xsl:template match="/">
-  <html>
-    <head>
-      <xsl:comment>automatically generated, handle with care</xsl:comment>
-    </head>
-    <xsl:apply-templates/>
-  </html>
+<xsl:template match="mock:section|mock:subsection|mock:paragraph">
+  <xsl:apply-templates/>
 </xsl:template>
 \end{lstlisting}
-we associate the template with the root of XML and then within the main structure, we tells \latexml to use other
-template when needed.
-\begin{lstlisting}
-<xsl:template match="mock:section">
-  <h1>
-    <xsl:value-of select="mock:title" />
-  </h1>
-  <p>
-    <xsl:value-of select="mock:p" />
-  </p>
-  <xsl:for-each select="mock:subsection">
-    <h2>
-      <xsl:value-of select="mock:title" />
-    </h2>
-    <xsl:for-each select="mock:paragraph">
-      <h3>
-	<xsl:value-of select="mock:title" />
-      </h3>
-      <p>
-	<xsl:value-of select="mock:p" />
-      </p>
-    </xsl:for-each>
-  </xsl:for-each>
-</xsl:stylesheet>
-</xsl:template>
-\end{lstlisting}
+
 In case of the section template, we let \latexml generate a section in HTML and then apply the templates for the macros that appear in \lstinline|mock:section| from our \lstinline|mockDoc.xml| file. Our \lstinline|mockDoc.xsl| should be consistent with our \lstinline|mockDoc.rnc| as they both define the structure of our documents, as we can see from the section definition in our \lstinline|mockDoc.rnc|, they both contain: title, p and subsection elements.
 \begin{lstlisting}
 section = element section {title,(p |subsection)*}
 \end{lstlisting}
+Also, we want to allow each children of a class to be processed whenever a template matches, to deal with situations such as a subsection, in which more than one paragraph can exist, so we use
+\begin{lstlisting}
+ <xsl:apply-templates/>
+\end{lstlisting}
+to check template matches.
 
 \section{Conclusion}\label{sec:concl}
 The trick of using \latexml is to get familiar with all the necessary components that are required for different processing, for instance if we want to customize the conversion from XML to HTML, it is much helpful to know 
@@ -333,6 +307,9 @@ The trick of using \latexml is to get familiar with all the necessary components
 
 \begin{appendix}
 \section{Appendix}
+\subsection{The mockDoc \TeX File}\label{app:tex}
+\lstinputlisting[language=TeX]{mockDoc.tex}
+
 \subsection{The mockDoc Class}\label{app:cls}
 \lstinputlisting[language={[LaTeX]TeX}]{mockDoc.cls}
 
