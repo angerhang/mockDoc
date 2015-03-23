@@ -5,7 +5,6 @@
 SRC = $(shell ls *.tex)
 XML = $(SRC:%.tex=%.xml)
 PDF = $(SRC:%.tex=%.pdf)
-HTML = $(SRC:%.xml=%.html)
 all: $(XML) $(PDF)
 
 mockDoc.rng: mockDoc.rnc 
@@ -15,9 +14,6 @@ mockDoc.rng: mockDoc.rnc
 #’$@‘: object filename. ‘$<‘:source file name
 $(XML): %.xml: %.tex mockDoc.rng mockDoc.cls.ltxml
 	latexmlc $<  --format=XML --destination=$@ --log=$@.log
-
-$(HTML): %.html: mockDoc.xml mockDoc.xsl
-	latexmlpost $<  --stylesheet=mockDoc.xsl --destination=$@ mockDoc.xml
 
 $(PDF): %.pdf: %.tex mockDoc.cls
 	xelatex $<
