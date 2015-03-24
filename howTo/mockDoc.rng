@@ -5,7 +5,9 @@
   </start>
   <define name="document">
     <element name="document">
-      <ref name="p"/>
+      <zeroOrMore>
+        <ref name="p"/>
+      </zeroOrMore>
       <zeroOrMore>
         <ref name="section"/>
       </zeroOrMore>
@@ -15,10 +17,10 @@
     <element name="section">
       <ref name="title"/>
       <zeroOrMore>
-        <choice>
-          <ref name="p"/>
-          <ref name="subsection"/>
-        </choice>
+        <ref name="p"/>
+      </zeroOrMore>
+      <zeroOrMore>
+        <ref name="subsection"/>
       </zeroOrMore>
     </element>
   </define>
@@ -33,7 +35,9 @@
   <define name="paragraph">
     <element name="paragraph">
       <ref name="title"/>
-      <ref name="p"/>
+      <oneOrMore>
+        <ref name="p"/>
+      </oneOrMore>
     </element>
   </define>
   <define name="title">
@@ -46,11 +50,14 @@
       <zeroOrMore>
         <choice>
           <text/>
-          <element name="break">
-            <empty/>
-          </element>
+          <ref name="break"/>
         </choice>
       </zeroOrMore>
+    </element>
+  </define>
+  <define name="break">
+    <element name="break">
+      <empty/>
     </element>
   </define>
 </grammar>

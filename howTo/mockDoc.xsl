@@ -31,12 +31,14 @@
   <h2><xsl:apply-templates/></h2>
 </xsl:template>
 
-<xsl:template match="mock:paragraph">
+<xsl:template match="mock:paragraph/mock:title">
   <h3><xsl:apply-templates/></h3>
 </xsl:template>
 
-<!-- caution, we we are chaning the namespace here --> 
+<!-- caution, we are changing the namespace here --> 
 <xsl:template match="mock:p">
   <p><xsl:apply-templates/></p>
 </xsl:template>
+
+<xsl:template match="mock:break"><br/></xsl:template>
 </xsl:stylesheet>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?latexml searchpaths="/Users/yuancalvin/xmlTrans/howto"?>
+<?latexml searchpaths="/Users/kohlhase/vc/git/github.com/angerhang/mockDoc/howTo"?>
 <?latexml class="mockDoc"?>
 <?latexml RelaxNGSchema="mockDoc.rng"?>
 <mock:document xmlns:mock="https://kwarc.info/projects/mockDoc">
@@ -21,7 +21,8 @@ Here is some text.
       <mock:paragraph>
         <mock:title>Paragraph 2</mock:title>
         <mock:p>
-Line 1<mock:break/>We try to test line break and paragraph II here.
+Line 1
+We try to test line break and paragraph II here.
 </mock:p>
       </mock:paragraph>
     </mock:subsection>

@@ -1,12 +1,12 @@
 default namespace md = "https://kwarc.info/projects/mockDoc"
 
 start = document
-document = element document {p, section*}
-section = element section {title,(p |subsection)*}
+document = element document {p*, section*}
+section = element section {title,p*,subsection*}
 subsection = element subsection {title,paragraph*}
-paragraph = element paragraph { title, p }
+paragraph = element paragraph {title, p+}
 title = element title { text }
-p = element p { (text|element break { empty })*}
-
+p = element p { (text|break)*}
+break = element break { empty }
 
 									
