@@ -62,7 +62,7 @@ suited for usage in the modern web. The DLMF (Digital Library of Mathematical Fu
 developed \latexml, a flexible, semantics-preserving {\LaTeX} to XML converter to fix
 this.
 
-However, for every {\LaTeX} class and package used in a document \latexml needs a
+However, for every {\LaTeX} class and package used in a document \latexml we need a
 \textbf{\latexml binding} -- a configuration file that specifies the XML counterpart of
 the {\LaTeX} command sequences provided by the respective class or package. 
 
@@ -71,13 +71,13 @@ and packages, the availability of bindings is still the most severe bottleneck f
 \latexml. The \latexml documentation~\cite{LaTeXML:manual} is mostly written for developers and
 quite impenetrable for beginners.
 
-To encourage binding development this how-to tutorial goes through the steps and pitfalls
+To encourage binding development, this how-to tutorial goes through the steps and pitfalls
 of creating a \latexml class binding from scratch. This tutorial does not cover advanced
 topics related to \latexml, for which we refer to the \latexml manual~\cite{LaTeXML:manual}.
 
 We have developed a minimal document class \lstinline|mockDoc| as an example for this
-how-to and will go through it step-by-step. All necessary files (and the development
-version of this tutorial )are available from~\cite{mockDoc:git}, but are also included in
+how-to and will go through in datail. All necessary files (and the development
+version of this tutorial) are available from~\cite{mockDoc:git}, but are also included in
 the appendix of this document for reference.
 
 This how-to tutorial is structured as follows: section~\ref{sec:using} briefly reviews
@@ -87,7 +87,7 @@ schema; section~\ref{sec:bind} gives a basic view of how to write \latexml bindi
 
 \section{Using LaTeXML}\label{sec:using}
 
-In this tutorial we we assume a working installation of \latexml -- see~\cite{LaTeXML:get}
+In this tutorial we assume a working installation of \latexml -- see~\cite{LaTeXML:get}
 for instructions -- on a Unix-like system (Linux, Mac OS, etc.). 
 
  Given that, we use the
@@ -107,25 +107,23 @@ passing the the documents through the post-processing filter modules.
 
 \subsection{Things We Need}
 \begin{description}
-\item[Source] Here we use \lstinline|mockDoc.tex| as a minimal example see section ~\ref{sec:mockTex} \item[{\LaTeX} class] we provide a {\LaTeX} class \lstinline|mockDoc.cls| for reference; sometimes it is useful to generate PDF for proofreading. The  normal situation in
+\item[Source] Here we use \lstinline|mockDoc.tex| as a minimal example see section ~\ref{sec:mockTex}. \item[{\LaTeX} class] We provide a {\LaTeX} class \lstinline|mockDoc.cls| for reference; sometimes it is useful to generate PDF for proofreading. The  normal situation in
   developing \latexml bindings is that the class/package pre-exists. This file won't be
   illustrated in this tutorial - see appendix ~\ref{app:cls} for source.
-\item[\latexml binding] the core issue of this tutorial. We use \lstinline|mockDoc.cls.ltxml|
+\item[\latexml binding] The core issue of this tutorial. We use \lstinline|mockDoc.cls.ltxml|
   -- see section~\ref{sec:bind} for a step-by-step explanation and appendix~\ref{app:ltxml}
   for the end result.
 \item[RelaxNG schema] \latexml needs a RelaxNG schema to infer the output structure. We
   supply it in compact form \lstinline|mockDoc.rnc| - see appendix~\ref{app:rnc} for source and section ~\ref{sec:rnc} for explanation, which
-  can be converted to the XML form \latexml needs \lstinline|mockDoc.rng| via
+  can assist the XML conversion, and we note that \latexml needs \lstinline|mockDoc.rng| via
   \lstinline|trang.jar|.  The reason for writing \lstinline|mockDoc.rnc| instead of
   \lstinline|mockDoc.rng| is that, \lstinline|mockDoc.rnc| is much shorter and easier to
   maintain. 
-\item[XSL stylesheet] to customize our output in the web workflow, we can provide \latexml with 
+\item[XSL stylesheet] To customize our output in the web workflow, we can provide \latexml with 
   \lstinline|mockDoc.xsl|, showing a general idea of how postprocessing works - see appendix~\ref{app:html}
   for the effects and section ~\ref{sec:posp} for a detailed description.
 \end{description} 
-After we have finished writing all the documents above, run the command mentioned before,
-and then we should be able to see the converted XML file for \lstinline|mockDoc.tex|. In
-the following chapters we will explain how to construct \lstinline|mockDoc.rnc| and
+After we have finished writing all the documents above, we should be able to see the converted XML file for \lstinline|mockDoc.tex|. In the following chapters we will explain how to construct \lstinline|mockDoc.rnc| and
 \lstinline|mockDoc.cls.ltxml|
 
 
@@ -139,7 +137,7 @@ make
 \section{The mockDoc Format}\label{sec:mockdoc}
 
 \subsection{A minimal Document Format}\label{sec:mockTex}
-Actually our \lstinline|mockDoc| format is probably the smallest one in the world, it is
+Actually our \lstinline|mockDoc| format is probably the smallest one in the world. It is
 only intended for this tutorial. 
 
 The {\LaTeX} class only provides one environment: \lstinline|document| and four macros:
@@ -148,7 +146,7 @@ The {\LaTeX} class only provides one environment: \lstinline|document| and four 
 
 \lstinputlisting[language={[LaTeX]TeX},caption=A Minimal {\LaTeX} Document,label=lst:minimal.tex]{mockDoc.tex}
 
-We want to use this document class for generating XML documents, which use the five
+We want to use this document class for generating XML document, which has five
 elements \lstinline|document|, \lstinline|\section|, \lstinline|\subsection|,
 \lstinline|\paragraph|, and \lstinline|\newline|. The XML document corresponding to the
 {\LaTeX} document from Listing~\ref{lst:minimal.tex} is
@@ -164,7 +162,7 @@ suitable for somewhat messy human readable documents, whilst in XML not everythi
 \subsection{The RelaxNG Schema}\label{sec:rnc}
 Schema is a crucial document that decides how \lstinline|mockDoc.xml| is constructed. When
 one is creating his own schema, the ~\cite{RelaxNG:tutorial} and ~\cite{XML:tutorial} are two
-good documentations to get started. One good approach to test this is to create our
+good documentations to get started. One convenient approach to test this is to create our
 expected \lstinline|mockDoc\_sample.xml| by hand, according to our
 \lstinline|mockDoc.tex|, then compare \lstinline|mockDoc\_sample.xml| with the generated
 \lstinline|mockDoc.xml|. We can easily accomplish this by using \textit{emacs nxml
@@ -175,14 +173,14 @@ can debug our \lstinline|mockDoc.xml| or schema accordingly.
 
 In our \lstinline|mockDoc.rnc|:
 \lstinputlisting[linerange={4-5}]{mockDoc.rnc}
-We can easily see that, under a \lstinline|document|, there can be either \lstinline|p| or \lstinline|section|, and under a \lstinline|section| there can be a \lstinline|title| followed by \lstinline|p| or a \lstinline|title| followed by a \lstinline|subsection|. This is due to the first section in \lstinline|mockDoc.tex|:
+We can easily see that, under a \lstinline|document|, there can be either \lstinline|p| or \lstinline|section|, and under a \lstinline|section| there can be a \lstinline|title| followed by either \lstinline|p| or \lstinline|subsection|. This is due to the first section in \lstinline|mockDoc.tex|:
 \lstinputlisting[linerange={3-4}]{mockDoc.tex}
 has no \lstinline|subsection| but text, and in the other \lstinline|section|s, there are \lstinline|subsection|s. We need to consider all possible hierarchies of our elements in the schema.
 
 
 
 \section{How to Create a \latexml Binding}\label{sec:bind}
-We now come to the central part of our tutorial: writing the \latexml binding
+We now come to the central part of this tutorial: writing the \latexml binding
 itself. Generally, a \latexml binding file is a Perl module -- and therefore underlies
 Perl syntax, but special high-level commands simplify expressing the {\LaTeX}-to-XML
 relation.
@@ -198,9 +196,9 @@ to make sure that perl works properly.
 \subsection{Configure namespace}
  With:
  \lstinputlisting[linerange={7-8}]{mockDoc.cls.ltxml}
- We declared the namespace associated the prefix \lstinline|mock| with the
+ We declare the namespace associated the prefix \lstinline|mock| with the
  namespace, and thus we can use the prefix when defining new macros to avoid 
- name conflicts. The second lines tells \latexml that the generated xml should fit in our
+ name conflicts. The second lines tells \latexml that the generated XML should fit in our
  schema.
 
 \subsection{Linebreaks}
@@ -215,7 +213,7 @@ This line defines how \latexml interprets \lstinline|\newline|, as we see,
 \subsection{Sectioning}
  When dealing with \lstinline|section|, things get a little tricky, with:
   \lstinputlisting[linerange={12-12}]{mockDoc.cls.ltxml}
-we defined \lstinline|\section|. But, think about the closing tags. In \lstinline|mockDoc.tex|, we declared where the \lstinline|\section| starts and where the next \lstinline|\section| starts, nevertheless, we never wrote something like ``Now close this section". Here is why we need \lstinline|mockDoc.rnc|. This schema file tells \latexml what the structure of our document, and with:
+we already define \lstinline|\section|. But, think about the closing tags. In \lstinline|mockDoc.tex|, we declare where the \lstinline|\section| starts and where the next \lstinline|\section| starts, nevertheless, we never write something like ``Now close this section". This schema file tells \latexml what the structure of our document, and with:
  \lstinputlisting[linerange={19-19}]{mockDoc.cls.ltxml}
 \latexml will close the section tags (i.e, adding \lstinline|</mock:section>|) whenever needed.
 
@@ -224,7 +222,7 @@ We may think something like:
 \begin{lstlisting}
 DefEnvironment('{document}', "<mock:document>#body</mock:document>");
 \end{lstlisting}
-is enough for defining \lstinline|document| environment. We can try it, but we will find that all spaces disappear. What we actually wrote in \lstinline|mockDoc.cls.ltxml| is:
+is enough for defining \lstinline|document| environment. We can try it, but we will find that all spaces disappear. What we actually write in \lstinline|mockDoc.cls.ltxml| is:
  \lstinputlisting[linerange={11-11}]{mockDoc.cls.ltxml}
 This code can prevent the error mentioned before, however, the mechanism of the \lstinline|beforeDigest| part is out of our discussion in this tutorial.
 
@@ -242,7 +240,7 @@ Since we also want to write some texts directly under \lstinline|document|, with
 which will surround such texts.
 
 
-We now have a complete set of tiles to generate our XML file. Simply by using makefile, we should be able to see the generated \lstinline|mockDoc.xml| in our current directory. It should be something similar to we expected
+We now have a complete set of tiles to generate our XML file. Simply by using makefile, we should be able to see the generated \lstinline|mockDoc.xml| in our current directory. It should be something similar to the expected
 \lstinline|mockDoc\_sample.xml|.
   
 \section{Postprocessing for Web Workflow}\label{sec:posp}
@@ -253,9 +251,9 @@ useful formats such as HTML, HTML5 and XHTML. \latexml by default provides us wi
 Similar to how we create RelaxNG schema, in \lstinline|mockDoc.xsl|
  \lstinputlisting[linerange={22-24}]{mockDoc.xsl}
 
-In case of the section template, we let \latexml generate a section in HTML and then apply the templates for the macros that appear in \lstinline|mock:section| from our \lstinline|mockDoc.xml| file. Our \lstinline|mockDoc.xsl| should be consistent with our \lstinline|mockDoc.rnc| as they both define the structure of our documents, as we can see from the section definition in our \lstinline|mockDoc.rnc|, they both contain: title, p and subsection elements.
+In case of the section template, we let \latexml generate a section in HTML and then apply the templates for the macros that appear in \lstinline|mock:section| from our \lstinline|mockDoc.xml| file. Our \lstinline|mockDoc.xsl| should be consistent with our \lstinline|mockDoc.rnc| because they both define the structure of our documents. As we can see from the section definition in our \lstinline|mockDoc.rnc|, they both contain: title, p and subsection elements.
  \lstinputlisting[linerange={5-5}]{mockDoc.rnc}
-Also, we want to allow each children of a class to be processed whenever a template matches, to deal with situations where we have a subsection, that conrtins more than one paragraph can exist, so we use
+Also, we want to allow each children of a class to be processed whenever a template matches, to deal with situations where we have a subsection, that contains more than one paragraph can exist, so we use
  \lstinputlisting[linerange={13-13}]{mockDoc.xsl}
 to check template matches.
 
