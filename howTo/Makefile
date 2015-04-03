@@ -2,11 +2,13 @@
 #declaration of variables 
 #set .tex as source. In our case only mockDoc is available
 #name .xml and .pdf based on .tex
-SRC = $(shell ls *.tex)
+SRC = mockDoc.tex
 XML = $(SRC:%.tex=%.xml)
-PDF = $(SRC:%.tex=%.pdf)
+PDF = $(SRC:%.tex=%.pdf) 
+HTML = $(SRC:%.tex=%.html)
 
-all: $(XML) $(PDF)
+
+all: $(XML) $(PDF) $(HTML) howTo.pdf
 
 mockDoc.rng: mockDoc.rnc 
 	java -jar trang.jar -I rnc -O rng mockDoc.rnc mockDoc.rng
@@ -16,5 +18,15 @@ mockDoc.rng: mockDoc.rnc
 $(XML): %.xml: %.tex mockDoc.rng mockDoc.cls.ltxml
 	latexmlc $<  --format=XML --destination=$@ --log=$@.log
 
+$(HTML): %.html: %.xml mockDoc.xsl
+	xsltproc -o $@ mockDoc.xsl $< 
+
 $(PDF): %.pdf: %.tex mockDoc.cls
 	xelatex $<
+
+howTo.pdf: howTo.tex $(XML) $(PDF) $(HTML) howTo.bib
+	pdflatex howTo
+	bibtex howTo
+	pdflatex howTo
+	pdflatex howTo
+

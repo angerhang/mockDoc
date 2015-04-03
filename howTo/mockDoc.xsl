@@ -3,47 +3,42 @@
 
 <!-- style sheet declration -->
 <xsl:stylesheet version="1.0"
-xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-xmlns:mock = "https://kwarc.info/projects/mockDoc"
-    exclude-result-prefixes="mock">
+		xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+		xmlns:mock = "https://kwarc.info/projects/mockDoc"
+		exclude-result-prefixes="mock">
 
-<!-- associate the template with the root of xml -->
 <xsl:template match="/">
   <html>
-    <head>
-      <xsl:comment>automatically generated, handle with care</xsl:comment>
-    </head>
+    <head><xsl:comment>automatically generated, handle with care</xsl:comment></head>
     <xsl:apply-templates/>
   </html>
 </xsl:template>
 
 <xsl:template match="mock:document">
-  <body>
-    <xsl:apply-templates/>
-  </body>
+  <body><xsl:apply-templates/></body>
 </xsl:template>
 
-<xsl:template match="mock:section">
-  <h1>
-    <xsl:value-of select="mock:title" />
-  </h1>
-  <p>
-    <xsl:value-of select="mock:p" />
-  </p>
-  <xsl:for-each select="mock:subsection">
-    <h2>
-      <xsl:value-of select="mock:title" />
-    </h2>
-    <xsl:for-each select="mock:paragraph">
-      <h3>
-	<xsl:value-of select="mock:title" />
-      </h3>
-      <p>
-	<xsl:value-of select="mock:p" />
-      </p>
-    </xsl:for-each>
-  </xsl:for-each>
-</xsl:stylesheet>
+<!-- sectioning commands do not leave a trace, we deal with the headers below -->
+<xsl:template match="mock:section|mock:subsection|mock:paragraph">
+  <xsl:apply-templates/>
+</xsl:template>
 
+<xsl:template match="mock:section/mock:title">
+  <h1><xsl:apply-templates/></h1>
+</xsl:template>
 
+<xsl:template match="mock:subsection/mock:title">
+  <h2><xsl:apply-templates/></h2>
+</xsl:template>
+
+<xsl:template match="mock:paragraph/mock:title">
+  <h3><xsl:apply-templates/></h3>
+</xsl:template>
+
+<!-- caution, we are changing the namespace here --> 
+<xsl:template match="mock:p">
+  <p><xsl:apply-templates/></p>
+</xsl:template>
+
+<xsl:template match="mock:break"><br/></xsl:template>
 </xsl:stylesheet>
