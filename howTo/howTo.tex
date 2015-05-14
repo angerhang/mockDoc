@@ -49,6 +49,18 @@
         Computer Science, Jacobs University Bremen}
 \begin{document}
 \maketitle
+\begin{abstract}
+  Writing \latexml bindings for {\LaTeX} classes is more difficult than bindings for
+  {\LaTeX} packages, since the class bindings need to supply a lot of the processing
+  infrastructure. Most {\LaTeX} classes inherit that from \lstinline|article.cls|, and
+  correspondingly most \latexml class bindings inherit from \lstinline|article.cls.ltxml|,
+  but some {\LaTeX} classes are standalone.
+
+  We explain how to write a \latexml binding for a {\LaTeX} class from scratch based on a
+  minimal example. This note intends to complement the \latexml documentation help
+  beginners get started.
+\end{abstract}
+\tableofcontents\newpage
 
 \section{Introduction}\label{sec:intro}
 
@@ -76,7 +88,7 @@ of creating a \latexml class binding from scratch. This tutorial does not cover 
 topics related to \latexml, for which we refer to the \latexml manual~\cite{LaTeXML:manual}.
 
 We have developed a minimal document class \lstinline|mockDoc| as an example for this
-how-to and will go through in datail. All necessary files (and the development
+how-to and will go through in detail. All necessary files (and the development
 version of this tutorial) are available from~\cite{mockDoc:git}, but are also included in
 the appendix of this document for reference.
 
@@ -186,7 +198,7 @@ Perl syntax, but special high-level commands simplify expressing the {\LaTeX}-to
 relation.
 
 \subsection{Basic structure}
-Since {\LaTeX} binding is a perl module, we need to initialize a binding file by adding
+Since {\LaTeX} binding is a perl module, we need to initialise a binding file by adding
 the followings in the beginning of \lstinline|mockDoc.cls.ltxml|:
 \lstinputlisting[linerange={1-4}]{mockDoc.cls.ltxml}
 At the end of \lstinline|mockDoc.cls.ltxml|, don't forget to include
@@ -258,38 +270,50 @@ Also, we want to allow each children of a class to be processed whenever a templ
 to check template matches.
 
 \section{Conclusion}\label{sec:concl}
-The trick of using \latexml is to get familiar with all the necessary components that are required for different processings, for instance if we want to customize the conversion from XML to HTML, it would be nice to know about \latexml schema, XSLT and XHTML. \latexml allows a large degree of customizations which maximizes the connivence of format conversion, particularly the conversion from \lstinline|tex| to \lstinline|xml|, as our prefer to use  {\TeX} for production and XML for delivery. For a web workflow, where the ultimate goal is to generate HTML5, writing a document class from scratch may not be the most common workflow, since the majority of document classes in {\LaTeX} is derived in some way from \lstinline|article.cls| and therefore
-  the \latexml bindings can inherit the from \lstinline|article.cls.ltmxl|, but in some
-  cases we want to use \latexml to generate other XML-based format. There we need the
-  techniques in this tutorial. Examples are generating OMDoc from s\TeX\ednote{MK: cite
-    them from kwarc.bib, are there others?}
+This note explains how to write a \latexml binding for a {\LaTeX} class from scratch based
+on a minimal example. It serves as a complement the \latexml documentation to help help
+beginners get started. 
+
+The case of bindings for {\LaTeX} classes is special, since we need to get familiar with
+all the necessary components that are required for different processing steps. For
+instance if we want to customize the conversion from XML to HTML, we need to know about
+\latexml schema, XSLT and XHTML. \latexml allows a large degree of customizations which
+maximizes the connivence of format conversion, particularly the conversion from
+\lstinline|tex| to \lstinline|xml|, as our prefer to use {\TeX} for production and XML for
+delivery. For a web workflow, where the ultimate goal is to generate HTML5, writing a
+document class from scratch may not be the most common workflow, since the majority of
+document classes in {\LaTeX} is derived in some way from \lstinline|article.cls| and
+therefore the \latexml bindings can inherit the from \lstinline|article.cls.ltmxl|, but in
+some cases we want to use \latexml to generate other XML-based format. There we need the
+techniques in this tutorial. Examples are generating OMDoc from
+s\TeX~\cite{Kohlhase:ulsmf08,URL:sTeX:github}, \lstinline|letter.cls|,
+\lstinline|amsart.cls|, etc. -- actually there are surprisingly few classes that do not
+inherit from \lstinline|article.cls|.
 
 
 \newpage
-
+\printbibliography 
+\newpage
 \begin{appendix}
 \section{Appendix}
 
 \subsection{The mockDoc Class}\label{app:cls}
 \lstinputlisting[language={[LaTeX]TeX}]{mockDoc.cls}
-
+\newpage
 \subsection{The mockDoc Class Binding}\label{app:ltxml}
 \lstinputlisting[language=Perl]{mockDoc.cls.ltxml}
-
+\newpage
 \subsection{mockDoc RelaxNG schema}\label{app:rnc}
 \lstinputlisting[language=RNC]{mockDoc.rnc}
-
+\newpage
 \subsection{XSL stylesheet}\label{app:xsl}
 \lstinputlisting[language=xsl]{mockDoc.xsl}
-
+\newpage
 \subsection{Generated HTML}\label{app:html}
 \lstinputlisting[language=html]{mockDoc.html}
-
+\newpage
 \section{A Makefile for Automation}\label{app:mk}
 \lstinputlisting[language=bash]{Makefile}
-
-\printbibliography
-
 \end{appendix}
 \end{document}
 
@@ -300,6 +324,6 @@ The trick of using \latexml is to get familiar with all the necessary components
 
 %  LocalWords:  maketitle noindent latexml textbf lstlisting latexmlc libxslt ednote nxml
 %  LocalWords:  mockDoc.cls mockDoc.rnc trang.jar trang.jar mockDoc.rng mockDoc.rng textit mk
-%  LocalWords:  nxml Bysshe cls
+%  LocalWords:  nxml Bysshe cls tableofcontents lstinline posp mockDoc.xsl customizations
 %  LocalWords:  subsection printbibliography newpage lstinputlisting ltxml rnc oldpart
-%  LocalWords:  lxtml mockdoc concl
+%  LocalWords:  lxtml mockdoc concl ulsmf08 amsart.cls
